@@ -1,0 +1,4 @@
+#!/usr/bin/python2
+import qubesmanager.manager
+
+qubesmanager.manager.run()
