@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
+<interface>
+  <requires lib="gtk+" version="3.12"/>
+  <object class="GtkActionGroup" id="actiongroup1"/>
+  <object class="GtkImage" id="imageAdd">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_right">5</property>
+    <property name="icon_name">list-add</property>
+  </object>
+  <object class="GtkImage" id="imageApplications">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="yalign">0.50999999046325684</property>
+    <property name="xpad">10</property>
+    <property name="pixel_size">32</property>
+    <property name="icon_name">applications-office</property>
+  </object>
+  <object class="GtkImage" id="imageBackups">
+    <property name="height_request">60</property>
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="xpad">10</property>
+    <property name="pixel_size">32</property>
+    <property name="icon_name">window-new</property>
+  </object>
+  <object class="GtkImage" id="imageHelp">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="xpad">10</property>
+    <property name="pixel_size">32</property>
+    <property name="icon_name">help-browser</property>
+  </object>
+  <object class="GtkImage" id="imageInstallApps">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_right">5</property>
+    <property name="icon_name">application-x-executable</property>
+  </object>
+  <object class="GtkImage" id="imageLogo">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">../icons/qubes-logo-name.png</property>
+  </object>
+  <object class="GtkImage" id="imageMicrophone">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_right">5</property>
+    <property name="icon_name">audio-input-microphone</property>
+  </object>
+  <object class="GtkGrid" id="applicationHeader">
+    <property name="width_request">800</property>
+    <property name="height_request">25</property>
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_left">15</property>
+    <property name="margin_right">15</property>
+    <property name="margin_top">10</property>
+    <property name="hexpand">True</property>
+    <property name="row_spacing">10</property>
+    <property name="column_spacing">15</property>
+    <property name="column_homogeneous">True</property>
+    <child>
+      <object class="GtkButton" id="buttonCreateQube">
+        <property name="label" translatable="yes">Create Qube</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="image">imageAdd</property>
+        <signal name="clicked" handler="createQube" swapped="no"/>
+      </object>
+      <packing>
+        <property name="left_attach">2</property>
+        <property name="top_attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkComboBoxText" id="comboFilterQubeState">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="active">0</property>
+        <items>
+          <item id="All" translatable="yes">All</item>
+          <item id="Running" translatable="yes">Running</item>
+          <item id="Halted" translatable="yes">Not Running</item>
+          <item id="Networked" translatable="yes">Networked</item>
+        </items>
+        <signal name="changed" handler="toggleQubeType" swapped="no"/>
+      </object>
+      <packing>
+        <property name="left_attach">3</property>
+        <property name="top_attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="buttonAttachMic">
+        <property name="label" translatable="yes">Attach Microphone</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="margin_right">5</property>
+        <property name="image">imageMicrophone</property>
+        <signal name="clicked" handler="attachMicrophone" swapped="no"/>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="buttonInstallApps">
+        <property name="label" translatable="yes">Install Apps</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="image">imageInstallApps</property>
+        <property name="xalign">0.44999998807907104</property>
+        <signal name="clicked" handler="installApps" swapped="no"/>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
+      </packing>
+    </child>
+  </object>
+  <object class="GtkImage" id="imageNetworking">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="xpad">10</property>
+    <property name="pixel_size">32</property>
+    <property name="icon_name">network-transmit-receive</property>
+  </object>
+  <object class="GtkImage" id="imageRecipes">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="xpad">10</property>
+    <property name="pixel_size">32</property>
+    <property name="icon_name">applications-science</property>
+  </object>
+  <object class="GtkImage" id="imageSettings">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="xpad">10</property>
+    <property name="pixel_size">32</property>
+    <property name="icon_name">applications-system</property>
+  </object>
+  <object class="GtkImage" id="imageSystemFiles">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="valign">end</property>
+    <property name="xpad">10</property>
+    <property name="ypad">10</property>
+    <property name="pixel_size">18</property>
+    <property name="icon_name">system-file-manager</property>
+  </object>
+  <object class="GtkImage" id="imageSystemTerminal">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="xpad">10</property>
+    <property name="ypad">10</property>
+    <property name="pixel_size">19</property>
+    <property name="icon_name">utilities-terminal</property>
+  </object>
+  <object class="GtkGrid" id="gridFooter">
+    <property name="height_request">60</property>
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_right">10</property>
+    <property name="margin_bottom">10</property>
+    <property name="row_spacing">10</property>
+    <property name="column_spacing">10</property>
+    <child>
+      <object class="GtkLabel" id="labelSystem">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">System</property>
+        <attributes>
+          <attribute name="weight" value="normal"/>
+        </attributes>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkGrid" id="gridFooterSystem">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="row_spacing">10</property>
+        <property name="column_spacing">10</property>
+        <child>
+          <object class="GtkButton" id="buttonSystemFiles">
+            <property name="label" translatable="yes">Files</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="image">imageSystemFiles</property>
+            <property name="relief">none</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="button1">
+            <property name="label" translatable="yes">Terminal</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="image">imageSystemTerminal</property>
+            <property name="relief">none</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">0</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
+      </packing>
+    </child>
+  </object>
+  <object class="GtkImage" id="imageTemplates">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="xpad">10</property>
+    <property name="pixel_size">32</property>
+    <property name="icon_name">preferences-desktop-wallpaper</property>
+  </object>
+  <object class="GtkToolbar" id="toolbarHeader">
+    <property name="width_request">800</property>
+    <property name="height_request">60</property>
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="toolbar_style">both</property>
+    <property name="show_arrow">False</property>
+    <property name="icon_size">0</property>
+    <child>
+      <object class="GtkToolButton" id="toolbuttonLogo">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="margin_left">15</property>
+        <property name="use_underline">True</property>
+        <property name="label_widget">imageLogo</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem" id="toolbarSeparator1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="margin_left">15</property>
+        <property name="margin_right">15</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkRadioToolButton" id="radioApplications">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="receives_default">True</property>
+        <property name="tooltip_text" translatable="yes">Show Applications qubes</property>
+        <property name="visible_vertical">False</property>
+        <property name="label" translatable="yes">Applications</property>
+        <property name="icon_widget">imageApplications</property>
+        <property name="active">True</property>
+        <signal name="toggled" handler="toggleQubeType" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkRadioToolButton" id="radioNetworking">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">Show Networking qubes</property>
+        <property name="visible_vertical">False</property>
+        <property name="label" translatable="yes">Networking</property>
+        <property name="icon_widget">imageNetworking</property>
+        <signal name="toggled" handler="toggleQubeType" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkRadioToolButton" id="radioTemplates">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">Show Template qubes</property>
+        <property name="visible_vertical">False</property>
+        <property name="label" translatable="yes">Templates</property>
+        <property name="icon_widget">imageTemplates</property>
+        <signal name="toggled" handler="toggleQubeType" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparatorToolItem" id="toolbarSeparator2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="margin_left">15</property>
+        <property name="margin_right">15</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="toolbuttonRecipes">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">Manage existing and find new Recipes</property>
+        <property name="margin_right">10</property>
+        <property name="label" translatable="yes">Recipes</property>
+        <property name="icon_widget">imageRecipes</property>
+        <signal name="clicked" handler="launchRecipes" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="toolbuttonBackups">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">Manage backups of your qubes</property>
+        <property name="margin_right">10</property>
+        <property name="label" translatable="yes">Backups</property>
+        <property name="icon_widget">imageBackups</property>
+        <signal name="clicked" handler="launchBackups" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="toolbuttonHelp">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">Help and Troubleshooting</property>
+        <property name="margin_right">10</property>
+        <property name="label" translatable="yes">Help</property>
+        <property name="icon_widget">imageHelp</property>
+        <signal name="clicked" handler="launchHelp" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToolButton" id="toolbuttonSettings">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="tooltip_text" translatable="yes">Global settings</property>
+        <property name="margin_right">10</property>
+        <property name="label" translatable="yes">Settings</property>
+        <property name="icon_widget">imageSettings</property>
+        <signal name="clicked" handler="launchSettings" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="homogeneous">True</property>
+      </packing>
+    </child>
+  </object>
+  <object class="GtkMenuBar" id="menubarMain">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkMenuItem" id="menuitem1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">_File</property>
+        <property name="use_underline">True</property>
+        <child type="submenu">
+          <object class="GtkMenu" id="menu1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkImageMenuItem" id="imagemenuitem1">
+                <property name="label">gtk-new</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkImageMenuItem" id="imagemenuitem2">
+                <property name="label">gtk-open</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkImageMenuItem" id="imagemenuitem3">
+                <property name="label">gtk-save</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkImageMenuItem" id="imagemenuitem4">
+                <property name="label">gtk-save-as</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSeparatorMenuItem" id="separatormenuitem1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkImageMenuItem" id="imagemenuitem5">
+                <property name="label">gtk-quit</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="menuitem2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">_Edit</property>
+        <property name="use_underline">True</property>
+        <child type="submenu">
+          <object class="GtkMenu" id="menu2">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkImageMenuItem" id="imagemenuitem6">
+                <property name="label">gtk-cut</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkImageMenuItem" id="imagemenuitem7">
+                <property name="label">gtk-copy</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkImageMenuItem" id="imagemenuitem8">
+                <property name="label">gtk-paste</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkImageMenuItem" id="imagemenuitem9">
+                <property name="label">gtk-delete</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="menuitem3">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">_View</property>
+        <property name="use_underline">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="menuitem4">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">_Help</property>
+        <property name="use_underline">True</property>
+        <child type="submenu">
+          <object class="GtkMenu" id="menu3">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkImageMenuItem" id="imagemenuitem10">
+                <property name="label">gtk-about</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkSeparator" id="separatorH1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+  </object>
+  <object class="GtkSeparator" id="separatorH2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_top">10</property>
+    <property name="margin_bottom">10</property>
+  </object>
+  <object class="GtkSeparator" id="separatorH3">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_top">10</property>
+    <property name="margin_bottom">10</property>
+  </object>
+  <object class="GtkSeparator" id="separatorH4">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+  </object>
+</interface>
