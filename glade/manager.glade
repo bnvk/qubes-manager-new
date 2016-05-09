@@ -2,11 +2,10 @@
 <!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
-  <object class="GtkActionGroup" id="actiongroup1"/>
   <object class="GtkImage" id="imageAdd">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="margin_right">5</property>
+    <property name="margin_right">10</property>
     <property name="icon_name">list-add</property>
   </object>
   <object class="GtkImage" id="imageApplications">
@@ -25,6 +24,18 @@
     <property name="pixel_size">32</property>
     <property name="icon_name">window-new</property>
   </object>
+  <object class="GtkImage" id="imageCaptivePortal">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_right">10</property>
+    <property name="icon_name">dialog-password</property>
+  </object>
+  <object class="GtkImage" id="imageCloneTemplate">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_right">10</property>
+    <property name="icon_name">document-save-as</property>
+  </object>
   <object class="GtkImage" id="imageHelp">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -35,7 +46,13 @@
   <object class="GtkImage" id="imageInstallApps">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="margin_right">5</property>
+    <property name="margin_right">10</property>
+    <property name="icon_name">application-x-executable</property>
+  </object>
+  <object class="GtkImage" id="imageInstallAppsTemplate">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_right">10</property>
     <property name="icon_name">application-x-executable</property>
   </object>
   <object class="GtkImage" id="imageLogo">
@@ -46,17 +63,16 @@
   <object class="GtkImage" id="imageMicrophone">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="margin_right">5</property>
+    <property name="margin_right">10</property>
     <property name="icon_name">audio-input-microphone</property>
   </object>
-  <object class="GtkGrid" id="applicationHeader">
-    <property name="width_request">800</property>
-    <property name="height_request">25</property>
+  <object class="GtkGrid" id="headerApps">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="margin_left">15</property>
     <property name="margin_right">15</property>
     <property name="margin_top">10</property>
+    <property name="margin_bottom">10</property>
     <property name="hexpand">True</property>
     <property name="row_spacing">10</property>
     <property name="column_spacing">15</property>
@@ -68,7 +84,7 @@
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
         <property name="image">imageAdd</property>
-        <signal name="clicked" handler="createQube" swapped="no"/>
+        <signal name="clicked" handler="on_clicked_create_qube" swapped="no"/>
       </object>
       <packing>
         <property name="left_attach">2</property>
@@ -86,7 +102,7 @@
           <item id="Halted" translatable="yes">Not Running</item>
           <item id="Networked" translatable="yes">Networked</item>
         </items>
-        <signal name="changed" handler="toggleQubeType" swapped="no"/>
+        <signal name="changed" handler="on_state_combo_changed" swapped="no"/>
       </object>
       <packing>
         <property name="left_attach">3</property>
@@ -101,7 +117,7 @@
         <property name="receives_default">True</property>
         <property name="margin_right">5</property>
         <property name="image">imageMicrophone</property>
-        <signal name="clicked" handler="attachMicrophone" swapped="no"/>
+        <signal name="clicked" handler="on_clicked_attach_mic" swapped="no"/>
       </object>
       <packing>
         <property name="left_attach">1</property>
@@ -116,7 +132,7 @@
         <property name="receives_default">True</property>
         <property name="image">imageInstallApps</property>
         <property name="xalign">0.44999998807907104</property>
-        <signal name="clicked" handler="installApps" swapped="no"/>
+        <signal name="clicked" handler="on_clicked_install_app_qube" swapped="no"/>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -131,6 +147,24 @@
     <property name="pixel_size">32</property>
     <property name="icon_name">network-transmit-receive</property>
   </object>
+  <object class="GtkImage" id="imageNewDevice">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_right">10</property>
+    <property name="icon_name">network-wireless</property>
+  </object>
+  <object class="GtkImage" id="imageNewProxy">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_right">10</property>
+    <property name="icon_name">network-server</property>
+  </object>
+  <object class="GtkImage" id="imageNewTemplate">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_right">10</property>
+    <property name="icon_name">window-new</property>
+  </object>
   <object class="GtkImage" id="imageRecipes">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -144,6 +178,84 @@
     <property name="xpad">10</property>
     <property name="pixel_size">32</property>
     <property name="icon_name">applications-system</property>
+  </object>
+  <object class="GtkImage" id="imageStopAll">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_right">10</property>
+    <property name="icon_name">dialog-error</property>
+  </object>
+  <object class="GtkGrid" id="headerNetworking">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_left">15</property>
+    <property name="margin_right">15</property>
+    <property name="margin_top">10</property>
+    <property name="margin_bottom">10</property>
+    <property name="row_spacing">10</property>
+    <property name="column_spacing">15</property>
+    <property name="column_homogeneous">True</property>
+    <child>
+      <object class="GtkButton" id="buttonCaptivePortal">
+        <property name="label" translatable="yes">Captive Portal</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="image">imageCaptivePortal</property>
+        <property name="xalign">0.44999998807907104</property>
+        <signal name="clicked" handler="on_clicked_captive_portal" swapped="no"/>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="buttonStopAll">
+        <property name="label" translatable="yes">Stop All</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="image">imageStopAll</property>
+        <property name="xalign">0.44999998807907104</property>
+        <property name="yalign">0.57999998331069946</property>
+        <signal name="clicked" handler="on_clicked_stop_all_networking" swapped="no"/>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="buttonNewProxy">
+        <property name="label" translatable="yes">New Proxy</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="image">imageNewProxy</property>
+        <property name="xalign">0.44999998807907104</property>
+        <signal name="clicked" handler="on_clicked_new_proxy" swapped="no"/>
+      </object>
+      <packing>
+        <property name="left_attach">2</property>
+        <property name="top_attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="buttonNewDevice">
+        <property name="label" translatable="yes">New Device</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="image">imageNewDevice</property>
+        <property name="xalign">0.44999998807907104</property>
+        <signal name="clicked" handler="in_clicked_new_device" swapped="no"/>
+      </object>
+      <packing>
+        <property name="left_attach">3</property>
+        <property name="top_attach">0</property>
+      </packing>
+    </child>
   </object>
   <object class="GtkImage" id="imageSystemFiles">
     <property name="visible">True</property>
@@ -162,7 +274,7 @@
     <property name="pixel_size">19</property>
     <property name="icon_name">utilities-terminal</property>
   </object>
-  <object class="GtkGrid" id="gridFooter">
+  <object class="GtkGrid" id="footerBar">
     <property name="height_request">60</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -170,20 +282,6 @@
     <property name="margin_bottom">10</property>
     <property name="row_spacing">10</property>
     <property name="column_spacing">10</property>
-    <child>
-      <object class="GtkLabel" id="labelSystem">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">System</property>
-        <attributes>
-          <attribute name="weight" value="normal"/>
-        </attributes>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">0</property>
-      </packing>
-    </child>
     <child>
       <object class="GtkGrid" id="gridFooterSystem">
         <property name="visible">True</property>
@@ -205,7 +303,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="button1">
+          <object class="GtkButton" id="buttonSystemTerminal">
             <property name="label" translatable="yes">Terminal</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
@@ -221,7 +319,7 @@
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">1</property>
+        <property name="top_attach">0</property>
       </packing>
     </child>
   </object>
@@ -230,158 +328,261 @@
     <property name="can_focus">False</property>
     <property name="xpad">10</property>
     <property name="pixel_size">32</property>
-    <property name="icon_name">preferences-desktop-wallpaper</property>
+    <property name="icon_name">package-x-generic</property>
   </object>
-  <object class="GtkToolbar" id="toolbarHeader">
-    <property name="width_request">800</property>
-    <property name="height_request">60</property>
+  <object class="GtkBox" id="toolbarMain">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="toolbar_style">both</property>
-    <property name="show_arrow">False</property>
-    <property name="icon_size">0</property>
+    <property name="orientation">vertical</property>
     <child>
-      <object class="GtkToolButton" id="toolbuttonLogo">
+      <placeholder/>
+    </child>
+    <child>
+      <object class="GtkToolbar" id="toolbarHeader">
+        <property name="width_request">800</property>
+        <property name="height_request">60</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">15</property>
-        <property name="use_underline">True</property>
-        <property name="label_widget">imageLogo</property>
+        <property name="toolbar_style">both</property>
+        <property name="show_arrow">False</property>
+        <property name="icon_size">0</property>
+        <child>
+          <object class="GtkToolButton" id="toolbuttonLogo">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">10</property>
+            <property name="use_underline">True</property>
+            <property name="label_widget">imageLogo</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="homogeneous">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSeparatorToolItem" id="toolbarSeparator1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">10</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="homogeneous">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkRadioToolButton" id="radioApplications">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Show Applications qubes</property>
+            <property name="margin_left">10</property>
+            <property name="visible_vertical">False</property>
+            <property name="label" translatable="yes">Applications</property>
+            <property name="icon_widget">imageApplications</property>
+            <property name="active">True</property>
+            <signal name="toggled" handler="on_type_toggled" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="homogeneous">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkRadioToolButton" id="radioNetworking">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="tooltip_text" translatable="yes">Show Networking qubes</property>
+            <property name="margin_left">10</property>
+            <property name="visible_vertical">False</property>
+            <property name="label" translatable="yes">Networking</property>
+            <property name="icon_widget">imageNetworking</property>
+            <property name="active">True</property>
+            <property name="group">radioApplications</property>
+            <signal name="toggled" handler="on_type_toggled" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="homogeneous">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkRadioToolButton" id="radioTemplates">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="tooltip_text" translatable="yes">Show Template qubes</property>
+            <property name="margin_left">10</property>
+            <property name="visible_vertical">False</property>
+            <property name="label" translatable="yes">Templates</property>
+            <property name="icon_widget">imageTemplates</property>
+            <property name="active">True</property>
+            <property name="group">radioApplications</property>
+            <signal name="toggled" handler="on_type_toggled" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="homogeneous">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSeparatorToolItem" id="toolbarSeparator2">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">10</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="homogeneous">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkToolButton" id="toolbuttonRecipes">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="tooltip_text" translatable="yes">Manage existing and find new Recipes</property>
+            <property name="margin_left">10</property>
+            <property name="label" translatable="yes">Recipes</property>
+            <property name="icon_widget">imageRecipes</property>
+            <signal name="clicked" handler="on_clicked_launch_recipes" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="homogeneous">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkToolButton" id="toolbuttonBackups">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="tooltip_text" translatable="yes">Manage backups of your qubes</property>
+            <property name="margin_left">10</property>
+            <property name="label" translatable="yes">Backups</property>
+            <property name="icon_widget">imageBackups</property>
+            <signal name="clicked" handler="on_clicked_launch_backups" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="homogeneous">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkToolButton" id="toolbuttonHelp">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="tooltip_text" translatable="yes">Help and Troubleshooting</property>
+            <property name="margin_left">10</property>
+            <property name="label" translatable="yes">Help</property>
+            <property name="icon_widget">imageHelp</property>
+            <signal name="clicked" handler="on_clicked_launch_help" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="homogeneous">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkToolButton" id="toolbuttonSettings">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="tooltip_text" translatable="yes">Global settings</property>
+            <property name="margin_left">10</property>
+            <property name="label" translatable="yes">Settings</property>
+            <property name="icon_widget">imageSettings</property>
+            <signal name="clicked" handler="on_clicked_launch_settings" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="homogeneous">True</property>
+          </packing>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>
-        <property name="homogeneous">True</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
       </packing>
     </child>
     <child>
-      <object class="GtkSeparatorToolItem" id="toolbarSeparator1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_left">15</property>
-        <property name="margin_right">15</property>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
+      <placeholder/>
     </child>
     <child>
-      <object class="GtkRadioToolButton" id="radioApplications">
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+  </object>
+  <object class="GtkImage" id="imageUpdateTemplates">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_right">10</property>
+    <property name="icon_name">system-software-update</property>
+  </object>
+  <object class="GtkGrid" id="headerTemplates">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_left">15</property>
+    <property name="margin_right">15</property>
+    <property name="margin_top">10</property>
+    <property name="margin_bottom">10</property>
+    <property name="row_spacing">10</property>
+    <property name="column_spacing">15</property>
+    <property name="column_homogeneous">True</property>
+    <child>
+      <object class="GtkButton" id="buttonInstallApp">
+        <property name="label" translatable="yes">Install Apps</property>
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="can_focus">True</property>
         <property name="receives_default">True</property>
-        <property name="tooltip_text" translatable="yes">Show Applications qubes</property>
-        <property name="visible_vertical">False</property>
-        <property name="label" translatable="yes">Applications</property>
-        <property name="icon_widget">imageApplications</property>
-        <property name="active">True</property>
-        <signal name="toggled" handler="toggleQubeType" swapped="no"/>
+        <property name="image">imageInstallAppsTemplate</property>
+        <signal name="clicked" handler="on_clicked_install_app_template" swapped="no"/>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
       </packing>
     </child>
     <child>
-      <object class="GtkRadioToolButton" id="radioNetworking">
+      <object class="GtkButton" id="buttonUpdateTemplates">
+        <property name="label" translatable="yes">Update Templates</property>
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">Show Networking qubes</property>
-        <property name="visible_vertical">False</property>
-        <property name="label" translatable="yes">Networking</property>
-        <property name="icon_widget">imageNetworking</property>
-        <signal name="toggled" handler="toggleQubeType" swapped="no"/>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="image">imageUpdateTemplates</property>
+        <property name="xalign">0.55000001192092896</property>
+        <signal name="clicked" handler="on_clicked_update_templates" swapped="no"/>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
+        <property name="left_attach">1</property>
+        <property name="top_attach">0</property>
       </packing>
     </child>
     <child>
-      <object class="GtkRadioToolButton" id="radioTemplates">
+      <object class="GtkButton" id="buttonNetTemplate">
+        <property name="label" translatable="yes">New Template</property>
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">Show Template qubes</property>
-        <property name="visible_vertical">False</property>
-        <property name="label" translatable="yes">Templates</property>
-        <property name="icon_widget">imageTemplates</property>
-        <signal name="toggled" handler="toggleQubeType" swapped="no"/>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="image">imageNewTemplate</property>
+        <signal name="clicked" handler="on_clicked_new_template" swapped="no"/>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
+        <property name="left_attach">2</property>
+        <property name="top_attach">0</property>
       </packing>
     </child>
     <child>
-      <object class="GtkSeparatorToolItem" id="toolbarSeparator2">
+      <object class="GtkButton" id="buttonCloneTemplate">
+        <property name="label" translatable="yes">Clone Template</property>
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_left">15</property>
-        <property name="margin_right">15</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="image">imageCloneTemplate</property>
+        <signal name="clicked" handler="on_clicked_clone_template" swapped="no"/>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkToolButton" id="toolbuttonRecipes">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">Manage existing and find new Recipes</property>
-        <property name="margin_right">10</property>
-        <property name="label" translatable="yes">Recipes</property>
-        <property name="icon_widget">imageRecipes</property>
-        <signal name="clicked" handler="launchRecipes" swapped="no"/>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkToolButton" id="toolbuttonBackups">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">Manage backups of your qubes</property>
-        <property name="margin_right">10</property>
-        <property name="label" translatable="yes">Backups</property>
-        <property name="icon_widget">imageBackups</property>
-        <signal name="clicked" handler="launchBackups" swapped="no"/>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkToolButton" id="toolbuttonHelp">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">Help and Troubleshooting</property>
-        <property name="margin_right">10</property>
-        <property name="label" translatable="yes">Help</property>
-        <property name="icon_widget">imageHelp</property>
-        <signal name="clicked" handler="launchHelp" swapped="no"/>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkToolButton" id="toolbuttonSettings">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">Global settings</property>
-        <property name="margin_right">10</property>
-        <property name="label" translatable="yes">Settings</property>
-        <property name="icon_widget">imageSettings</property>
-        <signal name="clicked" handler="launchSettings" swapped="no"/>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="homogeneous">True</property>
+        <property name="left_attach">3</property>
+        <property name="top_attach">0</property>
       </packing>
     </child>
   </object>
@@ -534,25 +735,5 @@
         </child>
       </object>
     </child>
-  </object>
-  <object class="GtkSeparator" id="separatorH1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-  </object>
-  <object class="GtkSeparator" id="separatorH2">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="margin_top">10</property>
-    <property name="margin_bottom">10</property>
-  </object>
-  <object class="GtkSeparator" id="separatorH3">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="margin_top">10</property>
-    <property name="margin_bottom">10</property>
-  </object>
-  <object class="GtkSeparator" id="separatorH4">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
   </object>
 </interface>
