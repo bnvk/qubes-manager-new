@@ -89,16 +89,16 @@ class ManagerWindow(Gtk.ApplicationWindow):
 		# ListStore of qubes
 		self.qubes_liststore = Gtk.ListStore(str, str, str, Pixbuf, str,
 											 bool, bool, bool)
-		for q in qvm_collection.values():
-			if q["icon"] != "default":
-				image = q["icon"]
+		for qube in qvm_collection.values():
+			if qube["icon"] != "default":
+				image = qube["icon"]
 			else:
 				image = "qube-32"
 			pixbuf = Pixbuf.new_from_file("icons/" + image + ".png")
 
-			qube = [q["type"], q["desc"], q["name"], pixbuf,
-				q["get_power_state"], q["is_fully_usable"],
-				q["is_guid_running"], q["is_networked"]
+			qube = [qube["type"], qube["desc"], qube["name"], pixbuf,
+				qube["get_power_state"], qube["is_fully_usable"],
+				qube["is_guid_running"], qube["is_networked"]
 			]
 
 			self.qubes_liststore.append(qube)
@@ -119,7 +119,32 @@ class ManagerWindow(Gtk.ApplicationWindow):
 
 		# Bottom Footer
 		self.vbox.pack_start(Gtk.Separator(), False, False, 0)
-		self.vbox.pack_end(builder.get_object("footerBar"), False, False, 0)
+
+		footerBox = Gtk.Box(spacing=10)
+		footerBox.set_border_width(10)	
+
+		# Add System qubes
+		for qube in qvm_collection.values():
+			if qube["type"] == "sys":
+				sys_button = self.create_sys_qube_button(qube)
+				sys_button.connect("clicked", self.on_clicked_sys_qube,
+								   qube["name"])
+				footerBox.pack_start(sys_button, False, False, 0)
+
+		footerSeparator = Gtk.Separator(orientation="vertical")
+		footerSeparator.set_margin_left(10)
+		footerSeparator.set_margin_right(10)
+		footerBox.pack_start(footerSeparator, False, False, 0)
+
+		# Add Devices
+		for qube in qvm_collection.values():
+			if qube["type"] == "dev":
+				device_button = self.create_device_button(qube)
+				device_button.connect("clicked", self.on_clicked_device)
+				footerBox.pack_start(device_button, False, False, 0)
+
+		footerBox.pack_end(builder.get_object("systemButtons"), False, False, 0)
+		self.vbox.pack_end(footerBox, False, False, 0)
 
 		# Show All
 		self.add(self.vbox)
@@ -160,6 +185,42 @@ class ManagerWindow(Gtk.ApplicationWindow):
 		# Show "app" qubes by default
 		self.type_filter.refilter()
 		self.vbox.pack_start(grid, True, True, 0)
+
+	def create_sys_qube_button(self, qube):
+		"""Creates button for system qube"""
+		if qube["icon"] != "default":
+			image = qube["icon"]
+		else:
+			image = "qube-32"
+		icon = Gtk.Image.new_from_file("icons/" + image + ".png")
+		icon.set_margin_bottom(5)
+
+		button = Gtk.Button()
+		button.set_label(qube["desc"])
+		button.set_image_position(Gtk.PositionType.TOP)
+		button.set_image(icon)
+		button.set_relief(Gtk.ReliefStyle.NONE)
+		button.set_size_request(70, 80)
+		# qube["get_power_state"]
+		# qube["is_fully_usable"]
+		# qube["is_guid_running"]
+		# qube["is_networked"]
+		
+		return button
+
+	def create_device_button(self, device):
+		"""Creates button for device qube"""
+		icon = Gtk.Image.new_from_file("icons/" + device["icon"] + ".png")
+		icon.set_margin_bottom(5)
+
+		button = Gtk.Button()
+		button.set_label(device["desc"])
+		button.set_image_position(Gtk.PositionType.TOP)
+		button.set_image(icon)
+		button.set_relief(Gtk.ReliefStyle.NONE)
+		button.set_size_request(70, 80)
+	
+		return button
 
 	def replace_qube_header(self, old, new):
 		parent = self.qubes_header[old].get_parent()
@@ -202,6 +263,9 @@ class ManagerWindow(Gtk.ApplicationWindow):
 				return True
 			else:
 				return False
+
+	def on_clicked_qubes_name(self, button):
+		print "show About dialog window"
 
 	def on_state_combo_changed(self, combo):
 		"""Event for header ComboBox to filter qubes by state"""
@@ -292,6 +356,22 @@ class ManagerWindow(Gtk.ApplicationWindow):
 
 	def on_clicked_clone_template(self, button):
 		print "clone new template"
+
+	# System Items
+	def on_clicked_sys_qube(self, button, qube):
+		print "open system qube: %s" % qube
+
+	# Device Items
+	def on_clicked_device(sel, button):
+		print "open device specific app"
+
+	# Sytem Items
+	def on_clicked_system_files(self, button):
+		print "launch system file browser"
+
+	def on_clicked_system_terminal(self, button):
+		print "launch system terminal"
+
 
 class QubesManager(Gtk.Application):
 

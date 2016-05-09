@@ -12,15 +12,15 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="yalign">0.50999999046325684</property>
-    <property name="xpad">10</property>
+    <property name="ypad">5</property>
     <property name="pixel_size">32</property>
     <property name="icon_name">applications-office</property>
   </object>
   <object class="GtkImage" id="imageBackups">
-    <property name="height_request">60</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="xpad">10</property>
+    <property name="margin_bottom">5</property>
+    <property name="ypad">5</property>
     <property name="pixel_size">32</property>
     <property name="icon_name">window-new</property>
   </object>
@@ -39,7 +39,8 @@
   <object class="GtkImage" id="imageHelp">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="xpad">10</property>
+    <property name="margin_bottom">5</property>
+    <property name="ypad">5</property>
     <property name="pixel_size">32</property>
     <property name="icon_name">help-browser</property>
   </object>
@@ -143,7 +144,7 @@
   <object class="GtkImage" id="imageNetworking">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="xpad">10</property>
+    <property name="ypad">5</property>
     <property name="pixel_size">32</property>
     <property name="icon_name">network-transmit-receive</property>
   </object>
@@ -168,14 +169,16 @@
   <object class="GtkImage" id="imageRecipes">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="xpad">10</property>
+    <property name="margin_bottom">5</property>
+    <property name="ypad">5</property>
     <property name="pixel_size">32</property>
     <property name="icon_name">applications-science</property>
   </object>
   <object class="GtkImage" id="imageSettings">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="xpad">10</property>
+    <property name="margin_bottom">5</property>
+    <property name="ypad">5</property>
     <property name="pixel_size">32</property>
     <property name="icon_name">applications-system</property>
   </object>
@@ -262,71 +265,23 @@
     <property name="can_focus">False</property>
     <property name="valign">end</property>
     <property name="xpad">10</property>
-    <property name="ypad">10</property>
-    <property name="pixel_size">18</property>
+    <property name="ypad">5</property>
+    <property name="pixel_size">32</property>
     <property name="icon_name">system-file-manager</property>
   </object>
   <object class="GtkImage" id="imageSystemTerminal">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="xpad">10</property>
-    <property name="ypad">10</property>
-    <property name="pixel_size">19</property>
+    <property name="ypad">5</property>
+    <property name="pixel_size">32</property>
     <property name="icon_name">utilities-terminal</property>
-  </object>
-  <object class="GtkGrid" id="footerBar">
-    <property name="height_request">60</property>
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="margin_right">10</property>
-    <property name="margin_bottom">10</property>
-    <property name="row_spacing">10</property>
-    <property name="column_spacing">10</property>
-    <child>
-      <object class="GtkGrid" id="gridFooterSystem">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="row_spacing">10</property>
-        <property name="column_spacing">10</property>
-        <child>
-          <object class="GtkButton" id="buttonSystemFiles">
-            <property name="label" translatable="yes">Files</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="image">imageSystemFiles</property>
-            <property name="relief">none</property>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="buttonSystemTerminal">
-            <property name="label" translatable="yes">Terminal</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="image">imageSystemTerminal</property>
-            <property name="relief">none</property>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">0</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">0</property>
-      </packing>
-    </child>
   </object>
   <object class="GtkImage" id="imageTemplates">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="xpad">10</property>
+    <property name="margin_bottom">5</property>
+    <property name="ypad">5</property>
     <property name="pixel_size">32</property>
     <property name="icon_name">package-x-generic</property>
   </object>
@@ -334,9 +289,6 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="orientation">vertical</property>
-    <child>
-      <placeholder/>
-    </child>
     <child>
       <object class="GtkToolbar" id="toolbarHeader">
         <property name="width_request">800</property>
@@ -353,6 +305,7 @@
             <property name="margin_left">10</property>
             <property name="use_underline">True</property>
             <property name="label_widget">imageLogo</property>
+            <signal name="clicked" handler="on_clicked_qubes_name" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -376,6 +329,7 @@
             <property name="can_focus">False</property>
             <property name="receives_default">True</property>
             <property name="tooltip_text" translatable="yes">Show Applications qubes</property>
+            <property name="valign">center</property>
             <property name="margin_left">10</property>
             <property name="visible_vertical">False</property>
             <property name="label" translatable="yes">Applications</property>
@@ -393,6 +347,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="tooltip_text" translatable="yes">Show Networking qubes</property>
+            <property name="valign">center</property>
             <property name="margin_left">10</property>
             <property name="visible_vertical">False</property>
             <property name="label" translatable="yes">Networking</property>
@@ -411,6 +366,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="tooltip_text" translatable="yes">Show Template qubes</property>
+            <property name="valign">center</property>
             <property name="margin_left">10</property>
             <property name="visible_vertical">False</property>
             <property name="label" translatable="yes">Templates</property>
@@ -440,6 +396,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="tooltip_text" translatable="yes">Manage existing and find new Recipes</property>
+            <property name="valign">center</property>
             <property name="margin_left">10</property>
             <property name="label" translatable="yes">Recipes</property>
             <property name="icon_widget">imageRecipes</property>
@@ -455,6 +412,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="tooltip_text" translatable="yes">Manage backups of your qubes</property>
+            <property name="valign">center</property>
             <property name="margin_left">10</property>
             <property name="label" translatable="yes">Backups</property>
             <property name="icon_widget">imageBackups</property>
@@ -470,6 +428,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="tooltip_text" translatable="yes">Help and Troubleshooting</property>
+            <property name="valign">center</property>
             <property name="margin_left">10</property>
             <property name="label" translatable="yes">Help</property>
             <property name="icon_widget">imageHelp</property>
@@ -485,6 +444,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="tooltip_text" translatable="yes">Global settings</property>
+            <property name="valign">center</property>
             <property name="margin_left">10</property>
             <property name="label" translatable="yes">Settings</property>
             <property name="icon_widget">imageSettings</property>
@@ -501,15 +461,6 @@
         <property name="fill">True</property>
         <property name="position">1</property>
       </packing>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
     </child>
   </object>
   <object class="GtkImage" id="imageUpdateTemplates">
@@ -734,6 +685,52 @@
           </object>
         </child>
       </object>
+    </child>
+  </object>
+  <object class="GtkGrid" id="systemButtons">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_right">10</property>
+    <property name="margin_bottom">10</property>
+    <property name="column_spacing">10</property>
+    <child>
+      <object class="GtkButton" id="buttonSystemTerminal">
+        <property name="label" translatable="yes">Terminal</property>
+        <property name="width_request">80</property>
+        <property name="height_request">70</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="tooltip_text" translatable="yes">Launch Qubes system terminal</property>
+        <property name="image">imageSystemTerminal</property>
+        <property name="relief">none</property>
+        <property name="image_position">top</property>
+        <signal name="clicked" handler="on_clicked_system_terminal" swapped="no"/>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="buttonSystemFiles">
+        <property name="label" translatable="yes">Files</property>
+        <property name="width_request">80</property>
+        <property name="height_request">70</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="tooltip_text" translatable="yes">Launch Qubes system file browser</property>
+        <property name="image">imageSystemFiles</property>
+        <property name="relief">none</property>
+        <property name="xalign">0.6600000262260437</property>
+        <property name="image_position">top</property>
+        <signal name="clicked" handler="on_clicked_system_files" swapped="no"/>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
+      </packing>
     </child>
   </object>
 </interface>
