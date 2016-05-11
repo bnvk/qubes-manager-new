@@ -277,6 +277,52 @@
     <property name="pixel_size">32</property>
     <property name="icon_name">utilities-terminal</property>
   </object>
+  <object class="GtkGrid" id="systemButtons">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_right">10</property>
+    <property name="margin_bottom">10</property>
+    <property name="column_spacing">10</property>
+    <child>
+      <object class="GtkButton" id="buttonSystemTerminal">
+        <property name="label" translatable="yes">Terminal</property>
+        <property name="width_request">80</property>
+        <property name="height_request">70</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="tooltip_text" translatable="yes">Launch Qubes system terminal</property>
+        <property name="image">imageSystemTerminal</property>
+        <property name="relief">none</property>
+        <property name="image_position">top</property>
+        <signal name="clicked" handler="on_clicked_system_terminal" swapped="no"/>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="buttonSystemFiles">
+        <property name="label" translatable="yes">Files</property>
+        <property name="width_request">80</property>
+        <property name="height_request">70</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="tooltip_text" translatable="yes">Launch Qubes system file browser</property>
+        <property name="image">imageSystemFiles</property>
+        <property name="relief">none</property>
+        <property name="xalign">0.6600000262260437</property>
+        <property name="image_position">top</property>
+        <signal name="clicked" handler="on_clicked_system_files" swapped="no"/>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
+      </packing>
+    </child>
+  </object>
   <object class="GtkImage" id="imageTemplates">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -305,7 +351,7 @@
             <property name="margin_left">10</property>
             <property name="use_underline">True</property>
             <property name="label_widget">imageLogo</property>
-            <signal name="clicked" handler="on_clicked_qubes_name" swapped="no"/>
+            <signal name="clicked" handler="on_clicked_qubes_logo" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -685,52 +731,6 @@
           </object>
         </child>
       </object>
-    </child>
-  </object>
-  <object class="GtkGrid" id="systemButtons">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="margin_right">10</property>
-    <property name="margin_bottom">10</property>
-    <property name="column_spacing">10</property>
-    <child>
-      <object class="GtkButton" id="buttonSystemTerminal">
-        <property name="label" translatable="yes">Terminal</property>
-        <property name="width_request">80</property>
-        <property name="height_request">70</property>
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
-        <property name="tooltip_text" translatable="yes">Launch Qubes system terminal</property>
-        <property name="image">imageSystemTerminal</property>
-        <property name="relief">none</property>
-        <property name="image_position">top</property>
-        <signal name="clicked" handler="on_clicked_system_terminal" swapped="no"/>
-      </object>
-      <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkButton" id="buttonSystemFiles">
-        <property name="label" translatable="yes">Files</property>
-        <property name="width_request">80</property>
-        <property name="height_request">70</property>
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
-        <property name="tooltip_text" translatable="yes">Launch Qubes system file browser</property>
-        <property name="image">imageSystemFiles</property>
-        <property name="relief">none</property>
-        <property name="xalign">0.6600000262260437</property>
-        <property name="image_position">top</property>
-        <signal name="clicked" handler="on_clicked_system_files" swapped="no"/>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">0</property>
-      </packing>
     </child>
   </object>
 </interface>

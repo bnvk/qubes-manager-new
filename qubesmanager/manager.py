@@ -14,10 +14,10 @@ from datetime import datetime, timedelta
 
 # Gtk
 import gi
-from gi.repository import Gtk
-from gi.repository import Gdk
-from gi.repository import Gio
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk, Gdk, Gio
 from gi.repository.GdkPixbuf import Pixbuf
+
 
 # Qubes Test Data
 import tests.data_vmcollection
@@ -71,6 +71,14 @@ class ManagerWindow(Gtk.ApplicationWindow):
 		# Toolbar
 		self.vbox.pack_start(builder.get_object("toolbarMain"), False, False, 0)
 		self.vbox.pack_start(Gtk.Separator(), False, False, 0)
+
+		#builder.get_object("toolbuttonHelp")
+
+		#menu = Gio.Menu()
+		#menu.append("Browse Files", "app.device_browse")
+		#menu.append("Eject Device", "app.device_eject")
+		#button.set_menu_model(menu)
+
 
 		# Header of qube
 		headerApps = builder.get_object("headerApps")
@@ -127,8 +135,6 @@ class ManagerWindow(Gtk.ApplicationWindow):
 		for qube in qvm_collection.values():
 			if qube["type"] == "sys":
 				sys_button = self.create_sys_qube_button(qube)
-				sys_button.connect("clicked", self.on_clicked_sys_qube,
-								   qube["name"])
 				footerBox.pack_start(sys_button, False, False, 0)
 
 		footerSeparator = Gtk.Separator(orientation="vertical")
@@ -140,7 +146,6 @@ class ManagerWindow(Gtk.ApplicationWindow):
 		for qube in qvm_collection.values():
 			if qube["type"] == "dev":
 				device_button = self.create_device_button(qube)
-				device_button.connect("clicked", self.on_clicked_device)
 				footerBox.pack_start(device_button, False, False, 0)
 
 		footerBox.pack_end(builder.get_object("systemButtons"), False, False, 0)
@@ -157,69 +162,108 @@ class ManagerWindow(Gtk.ApplicationWindow):
 		grid.set_row_homogeneous(True)
 
 		# Create Scrollable
-		scrollable = Gtk.ScrolledWindow()
-		scrollable.set_vexpand(True)
+		scrolled = Gtk.ScrolledWindow()
+		scrolled.set_vexpand(True)
 
-		# IconView
+		# Receive signals from mouse clicks in IconView
+		Gtk.IconView.add_events(self, Gdk.EventMask.BUTTON_PRESS_MASK)
+
+		# IconView of qubes
 		iconview = Gtk.IconView.new()
 		iconview.set_model(self.type_filter)
 		iconview.set_columns(5)
 		iconview.set_margin(10)
 		iconview.set_item_padding(15)
-		
+
 		# Choose Icon & Text value in list
 		iconview.set_pixbuf_column(3)
 		iconview.set_text_column(1)
 
 		# Attach iconview
-		scrollable.add(iconview)
-		grid.attach(scrollable, 0, 0, 8, 10)
+		scrolled.add(iconview)
+		grid.attach(scrolled, 0, 0, 8, 10)
 
-		# connect to the "item-activated" signal
+		# Make IconView items clickable w/ "item-activated"
+		# iconview.connect('activate-on-single-click',
 		iconview.connect('item-activated',
-			self.on_qube_item_activated,
+			self.on_qube_item_double_click,
 			self.type_filter)
 
-		iconview.grab_focus()
+		# Single Click
+		iconview.connect('button-press-event',
+			self.on_qube_item_single_click)
 
-		# Show "app" qubes by default
+		# Focus and show "app" qubes
+		iconview.grab_focus()
 		self.type_filter.refilter()
 		self.vbox.pack_start(grid, True, True, 0)
 
 	def create_sys_qube_button(self, qube):
 		"""Creates button for system qube"""
+		menu = Gio.Menu()
+
+		# Add state/status items
+		if (qube["is_guid_running"] == True and
+			qube["get_power_state"] == "Running"):
+
+			# Add "restart" if needed
+			if qube["is_outdated"] == True or qube["is_fully_usable"] == False:
+				menu.append("Restart (pending updates)", "app.qube_restart")
+
+			# Add "shutdown" always
+			menu.append("Shutdown", "app.qube_shutdown")
+		else:
+			menu.append("Start", "app.qube_start")
+
+		# TODO: specials actions by device type
+		# - app -> launch applications
+		# - networking -> create proxy
+		# - system -> browse files, drivers?
+
+		# Menu always items
+		menu.append("Backups", "app.qube_backups")
+		menu.append("Options", "app.qube_overview")
+
+		# TODO: determine icon by sys type (wifi, usb, sd, bluetooth)
+		# TODO: determine modify icon by state (running, halted, updateable)
 		if qube["icon"] != "default":
 			image = qube["icon"]
 		else:
 			image = "qube-32"
+
 		icon = Gtk.Image.new_from_file("icons/" + image + ".png")
 		icon.set_margin_bottom(5)
 
-		button = Gtk.Button()
+		button = Gtk.MenuButton()
 		button.set_label(qube["desc"])
 		button.set_image_position(Gtk.PositionType.TOP)
 		button.set_image(icon)
 		button.set_relief(Gtk.ReliefStyle.NONE)
 		button.set_size_request(70, 80)
-		# qube["get_power_state"]
-		# qube["is_fully_usable"]
-		# qube["is_guid_running"]
-		# qube["is_networked"]
-		
+		button.set_menu_model(menu)
+
 		return button
 
 	def create_device_button(self, device):
-		"""Creates button for device qube"""
+		"""Creates button & menu for attached device"""
+		# TODO: determine icon by device type (thumbdrive, printer...)
 		icon = Gtk.Image.new_from_file("icons/" + device["icon"] + ".png")
 		icon.set_margin_bottom(5)
-
-		button = Gtk.Button()
+	
+		button = Gtk.MenuButton()
 		button.set_label(device["desc"])
 		button.set_image_position(Gtk.PositionType.TOP)
 		button.set_image(icon)
 		button.set_relief(Gtk.ReliefStyle.NONE)
 		button.set_size_request(70, 80)
-	
+
+		# Menu Actions
+		# TODO: determine actions by device type (drive -> browse, printer...)
+		menu = Gio.Menu()
+		menu.append("Browse Files", "app.device_browse")
+		menu.append("Eject Device", "app.device_eject")
+		button.set_menu_model(menu)
+
 		return button
 
 	def replace_qube_header(self, old, new):
@@ -264,9 +308,42 @@ class ManagerWindow(Gtk.ApplicationWindow):
 			else:
 				return False
 
-	def on_clicked_qubes_name(self, button):
-		print "show About dialog window"
+	def on_clicked_qubes_logo(self, button):
 
+		# AboutDialog
+		about = Gtk.AboutDialog()
+		about.set_position(Gtk.WindowPosition.CENTER)
+
+		# Authors & Documenters
+		# TODO: perhaps automate this / use full list on website?
+		authors = ["Joanna Rutkowska", "Marek Marczykowski",
+				   "Wojciech Porczyk", "Rafal Wojdyla", "Patrick Schleizer",
+				   "Alexander Tereshkin", "Rafal Wojtczuk"]
+
+		documenters = ["Andrew David Wong", "Hashiko Nukama", "Michael Carbone",
+					   "Brennan Novak", "The Qubes OS Community"]
+
+		logo = Pixbuf.new_from_file("icons/qubes-logo.png")
+
+		# Add values
+		about.set_logo(logo)
+		about.set_program_name("Qubes Manager")
+		about.set_copyright("Copyright \xc2\xa9 2016 Qubes OS")
+		about.set_authors(authors)
+		about.set_documenters(documenters)
+		about.set_website("https://qubes-os.org")
+		about.set_website_label("Qubes OS Website")
+
+		# Connect close about response
+		about.connect("response", self.on_clicked_close_about)
+
+		# Show dialog
+		about.show()
+
+	def on_clicked_close_about(self, action, parameter):
+		action.destroy()
+
+	# Filter "qubes" events
 	def on_state_combo_changed(self, combo):
 		"""Event for header ComboBox to filter qubes by state"""
 		self.current_filter_state = self.filter_states[combo.get_active()]
@@ -303,10 +380,16 @@ class ManagerWindow(Gtk.ApplicationWindow):
 			self.search_and_mark(dialog.entry.get_text(), start)
 		dialog.destroy()
 
-	def on_qube_item_activated(self, icon_view, tree_path, store_item):
-		print "Grid button clicked: " + str(tree_path)
-
+	def on_qube_item_double_click(self, icon_view, tree_path, store_item):
+		print "Grid item double clicked (activated): " + str(tree_path)
 		self.type_filter[tree_path]
+
+	def on_qube_item_single_click(self, iconview, event):
+		if event.button == 3:
+			print "Grid item single clicked RIGHT"
+		else:
+			print "Grid item single clicked LEFT"
+
 
 	# Toolbar Buttons
 	def on_clicked_launch_recipes(self, button):
@@ -357,14 +440,6 @@ class ManagerWindow(Gtk.ApplicationWindow):
 	def on_clicked_clone_template(self, button):
 		print "clone new template"
 
-	# System Items
-	def on_clicked_sys_qube(self, button, qube):
-		print "open system qube: %s" % qube
-
-	# Device Items
-	def on_clicked_device(sel, button):
-		print "open device specific app"
-
 	# Sytem Items
 	def on_clicked_system_files(self, button):
 		print "launch system file browser"
@@ -376,7 +451,9 @@ class ManagerWindow(Gtk.ApplicationWindow):
 class QubesManager(Gtk.Application):
 
 	def __init__(self):
-		Gtk.Application.__init__(self)
+		Gtk.Application.__init__(self,
+								 application_id="org.invisiblethingslab.qubes",
+								 flags=Gio.ApplicationFlags.FLAGS_NONE)
 
 	def do_activate(self):
 		win = ManagerWindow(self)
@@ -384,6 +461,60 @@ class QubesManager(Gtk.Application):
 
 	def do_startup(self):
 		Gtk.Application.do_startup(self)
+
+		# Actions for qubes
+		action_qube_backups = Gio.SimpleAction.new("qube_backups", None)
+		action_qube_backups.connect("activate", self.qube_backups_callback)
+		self.add_action(action_qube_backups)
+		
+		action_qube_overview = Gio.SimpleAction.new("qube_overview", None)
+		action_qube_overview.connect("activate", self.qube_overview_callback)
+		self.add_action(action_qube_overview)
+
+		action_qube_start = Gio.SimpleAction.new("qube_start", None)
+		action_qube_start.connect("activate", self.qube_start_callback)
+		self.add_action(action_qube_start)
+
+		action_qube_shutdown = Gio.SimpleAction.new("qube_shutdown", None)
+		action_qube_shutdown.connect("activate", self.qube_shutdown_callback)
+		self.add_action(action_qube_shutdown)
+
+		action_qube_restart = Gio.SimpleAction.new("qube_restart", None)
+		action_qube_restart.connect("activate", self.qube_restart_callback)
+		self.add_action(action_qube_restart)
+
+		# Actions for attached devices
+		action_device_browse = Gio.SimpleAction.new("device_browse", None)
+		action_device_browse.connect("activate", self.device_browse_callback)
+		self.add_action(action_device_browse)
+
+		device_eject = Gio.SimpleAction.new("device_eject", None)
+		device_eject.connect("activate", self.device_eject_callback)
+		self.add_action(device_eject)
+
+	# Callbacks for qubes
+	def qube_backups_callback(self, action, parameter):
+		print("clicked: show qube Backup")
+
+	def qube_overview_callback(self, action, parameter):
+		print("clicked: show qube Overview")
+
+	def qube_start_callback(self, action, parameter):
+		print("clicked: qube Start")
+	
+	def qube_shutdown_callback(self, action, parameter):
+		print("clicked: qube Shutdown")
+
+	def qube_restart_callback(self, action, parameter):
+		print("clicked: qube Restart")
+
+	# Callbacks for devices
+	def device_browse_callback(self, action, parameter):
+		print("clicked: Browse Device")
+
+	def device_eject_callback(self, action, parameter):
+		print("clicked: Eject Device")
+
 
 app = QubesManager()
 exit_status = app.run(sys.argv)

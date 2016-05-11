@@ -120,16 +120,16 @@ def values():
 		"is_fully_usable": True,
 		"is_guid_running": True,
 		"is_networked": False,
-		"is_outdated": False,
+		"is_outdated": True,
 		"updateable": False
 	},{
 		"type": "sys",
 		"icon": "sd-card-32",
 		"name": "sddata",
 		"desc": "SD Card",
-		"get_power_state": "Running",
+		"get_power_state": "Halted",
 		"is_fully_usable": True,
-		"is_guid_running": True,
+		"is_guid_running": False,
 		"is_networked": False,
 		"is_outdated": False,
 		"updateable": False
