@@ -25,36 +25,119 @@ qvm_collection = tests.data_vmcollection
 
 class OverviewHandler(Gtk.Window):
 
-	def runToggle(self, toggle):
-		print "toggled runToggle"
+	def run_toggle(self, toggle, state):
+		print "toggled run_toggle: %s" % state
 
-	def networkManage(self, toggle):
-		print "toggled networkManage"
+	def network_manage(self, toggle):
+		print "toggled network_manage"
 
-	def updateNow(self, button):
-		print "clicked updateNow"
+	def update_now(self, button):
+		print "clicked update_now"
 
-	def editDiskSpace(self, button):
-		print "clicked editDiskSpace"
+	def edit_disk_space(self, button):
+		print "clicked edit_disk_space"
 
-	def deleteQube(self, button):
-		print "clicked deleteQube"
+	def clone_qube(self, button):
+		print "clicked clone_qube"
+
+	def delete_qube(self, button):
+		print "clicked delete_qube"
+
+	def closeOverviewWindow(self, button, event):
+		print "close Overview"
+
+	def show_qube_title(self, label):
+		print "show qube title"
+
+	def on_move_cursor(self, label):
+		print "on_move_cursor"
 
 
-# Load Glade UI
-builder = Gtk.Builder()
+class OverviewWindow(Gtk.Window):
 
-try:
-	builder.add_from_file("glade/overview.glade")
-except:
-	print("glade file not found")
-	sys.exit()
+	def __init__(self, qube_name):
 
-builder.connect_signals(OverviewHandler())
+		# Load Glade UI
+		self.builder = Gtk.Builder()
 
-window = builder.get_object("qubeOverview")
-window.show_all()
-window.connect("delete-event", Gtk.main_quit)
-window.show_all()
+		try:
+			self.builder.add_from_file("glade/overview.glade")
+		except:
+			print("glade file not found")
+			sys.exit()
 
-Gtk.main()
+		self.builder.connect_signals(OverviewHandler())
+
+		# Create Window
+		window = self.builder.get_object("qubeOverview")	
+		window.set_position(Gtk.WindowPosition.CENTER)
+		window.set_default_size(500, 450)
+		window.set_resizable(True)
+
+		# Get qube data
+		qube = qvm_collection.get_qube_by_name(qube_name)
+
+		# Update UI
+		if qube["icon"] != "default":
+			image = qube["icon"]
+		else:
+			image = "qube-32"
+
+		titleImage = self.builder.get_object("titleImage")
+		titleImage.set_from_file("icons/" + image + ".png")
+
+		titleLabel = self.builder.get_object("titleLabel")
+		titleLabel.set_label(qube["desc"])
+		
+		runningSwitch = self.builder.get_object("runningSwitch")
+
+		# State/status items
+		if (qube["is_guid_running"] == True and
+			qube["get_power_state"] == "Running"):
+			runningSwitch.set_active(True)
+		else:
+			runningSwitch.set_active(False)	
+
+		# Networking
+		comboBoxNetworking = self.builder.get_object("comboBoxNetworking")
+		comboBoxNetworking.set_active(qvm_collection.get_networking_type(qube))
+		
+		# Last Run
+		last_run = time.strftime('%d %m, %Y',
+								 time.localtime(qube["last_run_timestamp"]))
+		labelLastRun = self.builder.get_object("labelLastRun")
+		labelLastRun.set_label(last_run)
+
+		# Disk Space
+		diskSpace = self.builder.get_object("levelbarDiskSpace")
+		diskSpace.set_value(qvm_collection.get_disk_utilization(qube))
+		diskSpace.set_max_value(qvm_collection.get_private_img_sz(qube))
+
+		# Backups
+		last_backup = time.strftime('%d %m, %Y',
+								 time.localtime(qube["backup_timestamp"]))
+	 	labelBackupDate = self.builder.get_object("labelBackupDate")
+		labelBackupDate.set_label(last_backup)
+
+		# Type Options
+		if qube["type"] == "app":
+			self.builder.get_object("gridOptionsApplication").show()
+		elif qube["type"] == "net":
+			self.builder.get_object("gridOptionsNetworking").show()
+		elif qube["type"] == "template":
+			self.builder.get_object("gridOptionsTemplate").show()
+		else:
+			pass
+
+		# Close Window & Show
+		window.connect("delete-event", Gtk.main_quit)
+		window.show()
+
+
+def main(qube):
+
+	win = OverviewWindow(qube)
+	Gtk.main()
+
+if __name__ == "__main__":
+    main()
