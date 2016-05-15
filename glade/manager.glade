@@ -2,6 +2,45 @@
 <!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
+  <object class="GtkAssistant" id="assistantCreateAppQube">
+    <property name="can_focus">False</property>
+    <property name="use_header_bar">0</property>
+    <child>
+      <object class="GtkLabel" id="label1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Create App Qube</property>
+        <property name="ellipsize">start</property>
+      </object>
+      <packing>
+        <property name="page_type">intro</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="label2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Content page</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel" id="label3">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Application Qube Created Succesfully</property>
+      </object>
+      <packing>
+        <property name="page_type">confirm</property>
+      </packing>
+    </child>
+    <child internal-child="action_area">
+      <object class="GtkBox" id="assistant-action_area1">
+        <property name="can_focus">False</property>
+        <property name="halign">end</property>
+        <property name="spacing">6</property>
+      </object>
+    </child>
+  </object>
   <object class="GtkImage" id="imageAdd">
     <property name="visible">True</property>
     <property name="can_focus">False</property>

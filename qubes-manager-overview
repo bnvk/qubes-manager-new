@@ -1,4 +1,9 @@
 #!/usr/bin/python
+from sys import argv
 import qubesmanager.overview
 
-#qubesmanager.overview.run()
+if len(argv) > 1:
+	qubesmanager.overview.main(argv[1])
+else:
+	print "Specify name of the qube you would like to edit\n"
+	print "	qubes-manager-overview <qube-name>\n"

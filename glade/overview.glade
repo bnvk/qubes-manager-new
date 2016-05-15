@@ -40,7 +40,7 @@
     <property name="default_width">600</property>
     <property name="default_height">400</property>
     <property name="urgency_hint">True</property>
-    <signal name="delete-event" handler="closeOverviewWindow" swapped="no"/>
+    <signal name="delete-event" handler="close_overview_window" swapped="no"/>
     <child>
       <object class="GtkBox" id="settingsBox">
         <property name="visible">True</property>
@@ -77,7 +77,7 @@
                 <property name="label" translatable="yes">Qube Name</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
-                  <attribute name="scale" value="1.5"/>
+                  <attribute name="scale" value="1.75"/>
                 </attributes>
               </object>
               <packing>
@@ -132,9 +132,6 @@
                 <property name="active">0</property>
                 <items>
                   <item translatable="yes">None</item>
-                  <item translatable="yes">Normal</item>
-                  <item translatable="yes">Bitmask (VPN)</item>
-                  <item translatable="yes">Tor</item>
                 </items>
                 <signal name="changed" handler="network_manage" swapped="no"/>
               </object>
@@ -267,7 +264,7 @@
               <object class="GtkLabel" id="label4">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Last Backup:</property>
+                <property name="label" translatable="yes">Last backed up:</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>

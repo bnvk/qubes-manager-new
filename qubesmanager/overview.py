@@ -28,8 +28,8 @@ class OverviewHandler(Gtk.Window):
 	def run_toggle(self, toggle, state):
 		print "toggled run_toggle: %s" % state
 
-	def network_manage(self, toggle):
-		print "toggled network_manage"
+	def network_manage(self, combo):
+		print "combo network_manage active: %r" % combo.get_active()
 
 	def update_now(self, button):
 		print "clicked update_now"
@@ -43,14 +43,14 @@ class OverviewHandler(Gtk.Window):
 	def delete_qube(self, button):
 		print "clicked delete_qube"
 
-	def closeOverviewWindow(self, button, event):
-		print "close Overview"
-
 	def show_qube_title(self, label):
 		print "show qube title"
 
 	def on_move_cursor(self, label):
 		print "on_move_cursor"
+
+	def close_overview_window(self, button, event):
+		print "close Overview"
 
 
 class OverviewWindow(Gtk.Window):
@@ -88,7 +88,7 @@ class OverviewWindow(Gtk.Window):
 
 		titleLabel = self.builder.get_object("titleLabel")
 		titleLabel.set_label(qube["desc"])
-		
+
 		runningSwitch = self.builder.get_object("runningSwitch")
 
 		# State/status items
@@ -100,10 +100,21 @@ class OverviewWindow(Gtk.Window):
 
 		# Networking
 		comboBoxNetworking = self.builder.get_object("comboBoxNetworking")
-		comboBoxNetworking.set_active(qvm_collection.get_networking_type(qube))
+		# Get NetVMs to populate & select ID
+		net_qube_id = 0
+		selected_qube_id = 0
+		for this_qube in qvm_collection.values():
+
+			# TODO: will need to replace with better filtering / new API
+			if this_qube["type"] == "net":
+				comboBoxNetworking.append_text(this_qube["desc"])
+				net_qube_id += 1
+				if this_qube["name"] == qube["netvm"]:
+					selected_qube_id = net_qube_id
+		comboBoxNetworking.set_active(selected_qube_id)
 		
 		# Last Run
-		last_run = time.strftime('%d %m, %Y',
+		last_run = time.strftime('%d %b, %Y',
 								 time.localtime(qube["last_run_timestamp"]))
 		labelLastRun = self.builder.get_object("labelLastRun")
 		labelLastRun.set_label(last_run)
@@ -114,7 +125,7 @@ class OverviewWindow(Gtk.Window):
 		diskSpace.set_max_value(qvm_collection.get_private_img_sz(qube))
 
 		# Backups
-		last_backup = time.strftime('%d %m, %Y',
+		last_backup = time.strftime('%d %b, %Y',
 								 time.localtime(qube["backup_timestamp"]))
 	 	labelBackupDate = self.builder.get_object("labelBackupDate")
 		labelBackupDate.set_label(last_backup)

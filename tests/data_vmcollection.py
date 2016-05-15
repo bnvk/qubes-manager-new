@@ -185,7 +185,7 @@ def values():
 		"type": "net",
 		"icon": "default",
 		"name": "sys-whonix",
-		"desc": "Tor Routing",
+		"desc": "Tor",
 		"netvm": "sys-firewall",
 		"disk_utilization": 512,
 		"private_img_sz": 2048,
@@ -333,16 +333,6 @@ def get_qube_by_name(name):
 	for qube in qubes:
 		if qube["name"] == name:
 			return qube
-
-def get_networking_type(qube):
-	if qube["netvm"] == None:
-		return 0
-	elif qube["netvm"] in ["sys-firewall"]:
-		return 1	 
-	elif qube["netvm"] in ["sys-bitmask"]:
-		return 2
-	elif qube["netvm"] in ["sys-whonix"]:
-		return 3
 
 def get_disk_utilization(qube):
 	return qube["disk_utilization"]

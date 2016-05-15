@@ -18,11 +18,12 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, Gio
 from gi.repository.GdkPixbuf import Pixbuf
 
-
 # Qubes Test Data
 import tests.data_vmcollection
 qvm_collection = tests.data_vmcollection
 
+import qubesmanager.overview
+qube_overview = qubesmanager.overview
 
 class GenericDialog(Gtk.Dialog):
 
@@ -72,14 +73,6 @@ class ManagerWindow(Gtk.ApplicationWindow):
 		self.vbox.pack_start(builder.get_object("toolbarMain"), False, False, 0)
 		self.vbox.pack_start(Gtk.Separator(), False, False, 0)
 
-		#builder.get_object("toolbuttonHelp")
-
-		#menu = Gio.Menu()
-		#menu.append("Browse Files", "app.device_browse")
-		#menu.append("Eject Device", "app.device_eject")
-		#button.set_menu_model(menu)
-
-
 		# Header of qube
 		headerApps = builder.get_object("headerApps")
 		headerNetworking = builder.get_object("headerNetworking")
@@ -103,6 +96,17 @@ class ManagerWindow(Gtk.ApplicationWindow):
 			else:
 				image = "qube-32"
 			pixbuf = Pixbuf.new_from_file("icons/" + image + ".png")
+
+			# TODO: make qube icon reflect machine state
+			# 'Halted'		Machine is not active
+			# 'Transient'	Machine is running, not have guid or qrexec
+			# 'Running'		Machine is ready and running.
+			# 'Paused'		Machine is paused (currently not available, see below)
+			# 'Suspended'	Machine is S3-suspended
+			# 'Halting'		Machine is in process of shutting down
+			# 'Dying'		Machine crashed and is unusable
+			# 'Crashed'		Machine crashed and is unusable
+			# 'NA'			Machine is in unknown state
 
 			qube = [qube["type"], qube["desc"], qube["name"], pixbuf,
 				qube["get_power_state"], qube["is_fully_usable"],
@@ -157,9 +161,6 @@ class ManagerWindow(Gtk.ApplicationWindow):
 
 	def create_qube_grid(self):
 		"""Renders filterable IconView in a grid of qubes"""
-		grid = Gtk.Grid()
-		grid.set_column_homogeneous(True)
-		grid.set_row_homogeneous(True)
 
 		# Create Scrollable
 		scrolled = Gtk.ScrolledWindow()
@@ -172,6 +173,7 @@ class ManagerWindow(Gtk.ApplicationWindow):
 		iconview = Gtk.IconView.new()
 		iconview.set_model(self.type_filter)
 		iconview.set_columns(5)
+		iconview.set_item_width(120)
 		iconview.set_margin(10)
 		iconview.set_item_padding(15)
 
@@ -181,10 +183,8 @@ class ManagerWindow(Gtk.ApplicationWindow):
 
 		# Attach iconview
 		scrolled.add(iconview)
-		grid.attach(scrolled, 0, 0, 8, 10)
-
-		# Make IconView items clickable w/ "item-activated"
-		# iconview.connect('activate-on-single-click',
+	
+		# Make IconView items double clickable
 		iconview.connect('item-activated',
 			self.on_qube_item_double_click,
 			self.type_filter)
@@ -196,7 +196,7 @@ class ManagerWindow(Gtk.ApplicationWindow):
 		# Focus and show "app" qubes
 		iconview.grab_focus()
 		self.type_filter.refilter()
-		self.vbox.pack_start(grid, True, True, 0)
+		self.vbox.pack_start(scrolled, True, True, 0)
 
 	def create_sys_qube_button(self, qube):
 		"""Creates button for system qube"""
@@ -381,15 +381,14 @@ class ManagerWindow(Gtk.ApplicationWindow):
 		dialog.destroy()
 
 	def on_qube_item_double_click(self, icon_view, tree_path, store_item):
-		print "Grid item double clicked (activated): " + str(tree_path)
-		self.type_filter[tree_path]
+		print "Item double-clicked name: %r" % store_item[tree_path][2]
+		qube_overview.main(store_item[tree_path][2])
 
 	def on_qube_item_single_click(self, iconview, event):
 		if event.button == 3:
 			print "Grid item single clicked RIGHT"
 		else:
 			print "Grid item single clicked LEFT"
-
 
 	# Toolbar Buttons
 	def on_clicked_launch_recipes(self, button):
@@ -497,7 +496,11 @@ class QubesManager(Gtk.Application):
 		print("clicked: show qube Backup")
 
 	def qube_overview_callback(self, action, parameter):
-		print("clicked: show qube Overview")
+		print("clicked: show qube Overview: %s" % parameter)
+		print action.get_name
+		print action.get_state
+		help(action)
+		#qube_overview.main(store_item[tree_path][2])
 
 	def qube_start_callback(self, action, parameter):
 		print("clicked: qube Start")
