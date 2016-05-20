@@ -23,6 +23,9 @@ from gi.repository.GdkPixbuf import Pixbuf
 import tests.data_vmcollection
 qvm_collection = tests.data_vmcollection
 
+import qubesmanager.advanced
+qube_advanced = qubesmanager.advanced
+
 class OverviewHandler(Gtk.Window):
 
 	def run_toggle(self, toggle, state):
@@ -42,6 +45,10 @@ class OverviewHandler(Gtk.Window):
 
 	def delete_qube(self, button):
 		print "clicked delete_qube"
+
+	def qube_advanced(self, button):
+		print "clicked show advanced"
+		qube_advanced.main()
 
 	def show_qube_title(self, label):
 		print "show qube title"
@@ -145,9 +152,9 @@ class OverviewWindow(Gtk.Window):
 		window.show()
 
 
-def main(qube):
+def main(qube_name):
 
-	win = OverviewWindow(qube)
+	win = OverviewWindow(qube_name)
 	Gtk.main()
 
 if __name__ == "__main__":

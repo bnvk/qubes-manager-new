@@ -497,6 +497,7 @@
                 <property name="receives_default">True</property>
                 <property name="image">imageAdvanced</property>
                 <property name="relief">none</property>
+                <signal name="clicked" handler="qube_advanced" swapped="no"/>
               </object>
               <packing>
                 <property name="left_attach">2</property>
