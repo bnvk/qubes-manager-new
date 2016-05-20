@@ -25,6 +25,12 @@ qvm_collection = tests.data_vmcollection
 import qubesmanager.overview
 qube_overview = qubesmanager.overview
 
+import qubesmanager.recipes
+qubes_recipes = qubesmanager.recipes
+
+import qubesmanager.backups
+qubes_backups = qubesmanager.backups
+
 # Load Glade UI
 builder = Gtk.Builder()
 try:
@@ -370,9 +376,11 @@ class ManagerWindow(Gtk.ApplicationWindow):
 	# Toolbar Buttons
 	def on_clicked_launch_recipes(self, button):
 		print "launch Recipes"
+		qubes_recipes.main()
 
 	def on_clicked_launch_backups(self, button):
 		print "launch Backups"
+		qubes_backups.main()
 
 	def on_clicked_launch_help(self, button):
 		print "launch Help"
