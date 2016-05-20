@@ -75,6 +75,93 @@
     <property name="margin_right">10</property>
     <property name="icon_name">document-save-as</property>
   </object>
+  <object class="GtkImage" id="imageDom0Files">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="valign">end</property>
+    <property name="xpad">10</property>
+    <property name="ypad">5</property>
+    <property name="pixel_size">32</property>
+    <property name="icon_name">system-file-manager</property>
+  </object>
+  <object class="GtkImage" id="imageDom0Terminal">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="xpad">10</property>
+    <property name="ypad">5</property>
+    <property name="pixel_size">32</property>
+    <property name="icon_name">utilities-terminal</property>
+  </object>
+  <object class="GtkImage" id="imageDom0Update">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="xpad">10</property>
+    <property name="ypad">5</property>
+    <property name="pixel_size">32</property>
+    <property name="icon_name">system-software-update</property>
+  </object>
+  <object class="GtkGrid" id="systemButtons">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_right">10</property>
+    <property name="margin_bottom">10</property>
+    <property name="column_spacing">10</property>
+    <child>
+      <object class="GtkButton" id="buttonDom0Terminal">
+        <property name="label" translatable="yes">Terminal</property>
+        <property name="width_request">80</property>
+        <property name="height_request">70</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="tooltip_text" translatable="yes">Launch Qubes system terminal</property>
+        <property name="image">imageDom0Terminal</property>
+        <property name="relief">none</property>
+        <property name="image_position">top</property>
+        <signal name="clicked" handler="on_clicked_dom0_terminal" swapped="no"/>
+      </object>
+      <packing>
+        <property name="left_attach">2</property>
+        <property name="top_attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="buttonDom0Files">
+        <property name="label" translatable="yes">Files</property>
+        <property name="width_request">80</property>
+        <property name="height_request">70</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="tooltip_text" translatable="yes">Launch Qubes system file browser</property>
+        <property name="image">imageDom0Files</property>
+        <property name="relief">none</property>
+        <property name="xalign">0.6600000262260437</property>
+        <property name="image_position">top</property>
+        <signal name="clicked" handler="on_clicked_dom0_files" swapped="no"/>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="buttonDom0Updates">
+        <property name="label" translatable="yes">Updates</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="image">imageDom0Update</property>
+        <property name="relief">none</property>
+        <property name="image_position">top</property>
+        <signal name="clicked" handler="on_clicked_dom0_updates" swapped="no"/>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
+      </packing>
+    </child>
+  </object>
   <object class="GtkImage" id="imageHelp">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -221,6 +308,485 @@
     <property name="pixel_size">32</property>
     <property name="icon_name">applications-system</property>
   </object>
+  <object class="GtkImage" id="imageSettingsCancel">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_right">5</property>
+    <property name="stock">gtk-cancel</property>
+  </object>
+  <object class="GtkImage" id="imageSettingsSave">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_right">5</property>
+    <property name="stock">gtk-apply</property>
+  </object>
+  <object class="GtkDialog" id="dialogGlobalSettings">
+    <property name="can_focus">False</property>
+    <property name="type_hint">dialog</property>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="dialog-vbox1">
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">20</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="dialog-action_area1">
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="buttonSettingsCancel">
+                <property name="label" translatable="yes">Cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="image">imageSettingsCancel</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="buttonSettingsSave">
+                <property name="label" translatable="yes">Save</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="margin_left">15</property>
+                <property name="image">imageSettingsSave</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid" id="boxSettingsDialog">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="row_spacing">20</property>
+            <property name="column_spacing">20</property>
+            <child>
+              <object class="GtkLabel" id="label8">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Default Applications</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                  <attribute name="scale" value="1.05"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label9">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Default Qubes</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                  <attribute name="scale" value="1.01"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label10">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Updates</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                  <attribute name="scale" value="1.01"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box1">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">10</property>
+                <child>
+                  <object class="GtkGrid" id="gridUpdatesQube">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_bottom">15</property>
+                    <property name="row_spacing">15</property>
+                    <property name="column_spacing">15</property>
+                    <child>
+                      <object class="GtkLabel" id="label4">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Updates</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBoxText" id="comboSettingsUpdates">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="checkbutton1">
+                    <property name="label" translatable="yes">Check system updates</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="checkbutton2">
+                    <property name="label" translatable="yes">Check for template updates</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label11">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Memory</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                  <attribute name="scale" value="1.01"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="gridSettingsMemory">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="row_spacing">15</property>
+                <property name="column_spacing">15</property>
+                <child>
+                  <object class="GtkLabel" id="labelSettingsMemBoost">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Boost Memory</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="spinSettingsMemMin">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="spinSettingsMemBoost">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="labelSettingsMemMin">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Minimal Memory</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="gridSettingsDefault">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="row_spacing">15</property>
+                <property name="column_spacing">15</property>
+                <child>
+                  <object class="GtkLabel" id="label5">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Clock</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="comboSettingsClock">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label6">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Networking</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label7">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Template</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label12">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Kernel</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="comboSettingsNetworking">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="comboSettingsTemplate">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="comboSettingsKernel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">3</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="gridSettingsApplications">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="row_spacing">15</property>
+                <property name="column_spacing">15</property>
+                <child>
+                  <object class="GtkLabel" id="label13">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">File Manager</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="comboSettingsFiles">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <items>
+                      <item translatable="yes">Nautilus</item>
+                      <item translatable="yes">Dolphin</item>
+                    </items>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="comboSettingsBrowser">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <items>
+                      <item translatable="yes">Firefox / IceWeasel</item>
+                      <item translatable="yes">Chromium</item>
+                      <item translatable="yes">Tor Browser</item>
+                    </items>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label15">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Web Browser</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label14">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Terminal</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="comboSettingsTerminal">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <items>
+                      <item translatable="yes">Terminal</item>
+                      <item translatable="yes">Konsole</item>
+                    </items>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label16">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Text Editor</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">0</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="comboSettingsText">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <items>
+                      <item translatable="yes">gedit</item>
+                      <item translatable="yes">GNU Emacs 24</item>
+                      <item translatable="yes">GVim</item>
+                      <item translatable="yes">Vim</item>
+                      <item translatable="yes">Libre Office</item>
+                    </items>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">2</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
   <object class="GtkImage" id="imageStopAll">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -295,69 +861,6 @@
       </object>
       <packing>
         <property name="left_attach">3</property>
-        <property name="top_attach">0</property>
-      </packing>
-    </child>
-  </object>
-  <object class="GtkImage" id="imageSystemFiles">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="valign">end</property>
-    <property name="xpad">10</property>
-    <property name="ypad">5</property>
-    <property name="pixel_size">32</property>
-    <property name="icon_name">system-file-manager</property>
-  </object>
-  <object class="GtkImage" id="imageSystemTerminal">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="xpad">10</property>
-    <property name="ypad">5</property>
-    <property name="pixel_size">32</property>
-    <property name="icon_name">utilities-terminal</property>
-  </object>
-  <object class="GtkGrid" id="systemButtons">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="margin_right">10</property>
-    <property name="margin_bottom">10</property>
-    <property name="column_spacing">10</property>
-    <child>
-      <object class="GtkButton" id="buttonSystemTerminal">
-        <property name="label" translatable="yes">Terminal</property>
-        <property name="width_request">80</property>
-        <property name="height_request">70</property>
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
-        <property name="tooltip_text" translatable="yes">Launch Qubes system terminal</property>
-        <property name="image">imageSystemTerminal</property>
-        <property name="relief">none</property>
-        <property name="image_position">top</property>
-        <signal name="clicked" handler="on_clicked_system_terminal" swapped="no"/>
-      </object>
-      <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkButton" id="buttonSystemFiles">
-        <property name="label" translatable="yes">Files</property>
-        <property name="width_request">80</property>
-        <property name="height_request">70</property>
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
-        <property name="tooltip_text" translatable="yes">Launch Qubes system file browser</property>
-        <property name="image">imageSystemFiles</property>
-        <property name="relief">none</property>
-        <property name="xalign">0.6600000262260437</property>
-        <property name="image_position">top</property>
-        <signal name="clicked" handler="on_clicked_system_files" swapped="no"/>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
         <property name="top_attach">0</property>
       </packing>
     </child>

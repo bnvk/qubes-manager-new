@@ -25,24 +25,13 @@ qvm_collection = tests.data_vmcollection
 import qubesmanager.overview
 qube_overview = qubesmanager.overview
 
-class GenericDialog(Gtk.Dialog):
-
-	def __init__(self, parent):
-
-		Gtk.Dialog.__init__(self, "Search", parent,
-			Gtk.DialogFlags.MODAL, buttons=(
-			Gtk.STOCK_FIND, Gtk.ResponseType.OK,
-			Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL))
-
-		box = self.get_content_area()
-
-		label = Gtk.Label("Insert text you want to search for:")
-		box.add(label)
-
-		self.entry = Gtk.Entry()
-		box.add(self.entry)
-
-		self.show_all()
+# Load Glade UI
+builder = Gtk.Builder()
+try:
+	builder.add_from_file("glade/manager.glade")
+except:
+	print("file not found")
+	sys.exit()
 
 
 class ManagerWindow(Gtk.ApplicationWindow):
@@ -55,14 +44,7 @@ class ManagerWindow(Gtk.ApplicationWindow):
 		self.set_resizable(True)
 		self.set_position(Gtk.WindowPosition.CENTER)
 
-		# Load Glade UI
-		builder = Gtk.Builder()
-		try:
-			builder.add_from_file("glade/manager.glade")
-		except:
-			print("file not found")
-			sys.exit()
-
+		# Add Events
 		builder.connect_signals(self)
 
 		# Elements
@@ -154,6 +136,13 @@ class ManagerWindow(Gtk.ApplicationWindow):
 
 		footerBox.pack_end(builder.get_object("systemButtons"), False, False, 0)
 		self.vbox.pack_end(footerBox, False, False, 0)
+
+		# Check for Updates
+		# TODO: this should call out to check status somewhere
+		imageDom0Update = builder.get_object("imageDom0Update")
+		imageDom0Update.set_from_icon_name("software-update-available", 32)
+		buttonDom0Updates = builder.get_object("buttonDom0Updates")
+		buttonDom0Updates.set_label("Update Now")
 
 		# Show All
 		self.add(self.vbox)
@@ -368,18 +357,6 @@ class ManagerWindow(Gtk.ApplicationWindow):
 		self.current_filter = self.current_filter_type
 		self.type_filter.refilter()
 
-	def on_clicked_dialog(self, widget, value):
-		print "Load GenericDialogue for: " + value
-		dialog = GenericDialog(self)
-		response = dialog.run()
-		if response == Gtk.ResponseType.OK:
-			cursor_mark = self.textbuffer.get_insert()
-			start = self.textbuffer.get_iter_at_mark(cursor_mark)
-			if start.get_offset() == self.textbuffer.get_char_count():
-				start = self.textbuffer.get_start_iter()
-			self.search_and_mark(dialog.entry.get_text(), start)
-		dialog.destroy()
-
 	def on_qube_item_double_click(self, icon_view, tree_path, store_item):
 		print "Item double-clicked name: %r" % store_item[tree_path][2]
 		qube_overview.main(store_item[tree_path][2])
@@ -401,7 +378,62 @@ class ManagerWindow(Gtk.ApplicationWindow):
 		print "launch Help"
 
 	def on_clicked_launch_settings(self, button):
-		print "launch Settings"
+		print "Launch SettingsDialog"
+		dialogSettings = builder.get_object("dialogGlobalSettings")
+		dialogSettings.set_default_size(500, 350)
+		dialogSettings.set_title("Qubes Settings")
+		dialogSettings.set_border_width(15)
+
+		# Various comboboxes
+		comboSettingsFiles = builder.get_object("comboSettingsFiles")
+		comboSettingsBrowser = builder.get_object("comboSettingsBrowser")
+		comboSettingsText = builder.get_object("comboSettingsText")
+		comboSettingsTerminal = builder.get_object("comboSettingsTerminal")
+
+		comboSettingsUpdates = builder.get_object("comboSettingsUpdates")
+		comboSettingsClock = builder.get_object("comboSettingsClock")
+		comboSettingsNetworking = builder.get_object("comboSettingsNetworking")
+		comboSettingsTemplate = builder.get_object("comboSettingsTemplate") 
+		comboSettingsKernel = builder.get_object("comboSettingsKernel")
+		
+		# Populate & Pick "qube" comboboxes
+		for this_qube in qvm_collection.values():
+
+			comboSettingsUpdates.append_text(this_qube["desc"])
+			comboSettingsClock.append_text(this_qube["desc"])
+
+			if this_qube["type"] == "net":
+				comboSettingsNetworking.append_text(this_qube["desc"])
+
+			if this_qube["type"] == "template":
+				comboSettingsTemplate.append_text(this_qube["desc"])
+
+		comboSettingsFiles.set_active(0)
+		comboSettingsBrowser.set_active(0)
+		comboSettingsText.set_active(0)
+		comboSettingsTerminal.set_active(1)
+
+		comboSettingsUpdates.set_active(10)
+		comboSettingsClock.set_active(7)
+		comboSettingsNetworking.set_active(3)
+		comboSettingsTemplate.set_active(1)
+
+		# Kernel
+		comboSettingsKernel.append_text("4.1.13-9")
+		comboSettingsKernel.set_active(0)
+
+		# Memory Settings
+		spinSettingsMemMin = builder.get_object("spinSettingsMemMin")
+		spinSettingsMemBoost = builder.get_object("spinSettingsMemBoost")
+
+		mem_min_adjustment = Gtk.Adjustment(0, 0, 100, 1, 10, 0)
+		mem_boost_adjustment = Gtk.Adjustment(0, 0, 100, 1, 10, 0)
+
+		spinSettingsMemMin.set_adjustment(mem_min_adjustment)
+		spinSettingsMemBoost.set_adjustment(mem_boost_adjustment)
+
+		# Show It
+		dialogSettings.show()
 
 	# Header Applications
 	def on_clicked_install_app_qube(self, button):
@@ -440,11 +472,14 @@ class ManagerWindow(Gtk.ApplicationWindow):
 		print "clone new template"
 
 	# Sytem Items
-	def on_clicked_system_files(self, button):
-		print "launch system file browser"
+	def on_clicked_dom0_updates(self, button):
+		print "launch dom0 updates"
+	
+	def on_clicked_dom0_files(self, button):
+		print "launch dom0 file browser"
 
-	def on_clicked_system_terminal(self, button):
-		print "launch system terminal"
+	def on_clicked_dom0_terminal(self, button):
+		print "launch dom0 terminal"
 
 
 class QubesManager(Gtk.Application):
@@ -491,15 +526,13 @@ class QubesManager(Gtk.Application):
 		device_eject.connect("activate", self.device_eject_callback)
 		self.add_action(device_eject)
 
+
 	# Callbacks for qubes
 	def qube_backups_callback(self, action, parameter):
 		print("clicked: show qube Backup")
 
 	def qube_overview_callback(self, action, parameter):
 		print("clicked: show qube Overview: %s" % parameter)
-		print action.get_name
-		print action.get_state
-		help(action)
 		#qube_overview.main(store_item[tree_path][2])
 
 	def qube_start_callback(self, action, parameter):
