@@ -31,53 +31,28 @@ qubes_recipes = qubesmanager.recipes
 import qubesmanager.backups
 qubes_backups = qubesmanager.backups
 
-# Load Glade UI
-builder = Gtk.Builder()
-try:
-	builder.add_from_file("glade/manager.glade")
-except:
-	print("file not found")
-	sys.exit()
 
-
-class ManagerWindow(Gtk.ApplicationWindow):
+class ManagerWindow(object):
 
 	def __init__(self, app):
 
+	      	# Load Glade UI
+		self.builder = Gtk.Builder()
+		self.builder.add_from_file("glade/manager.glade")
+
 		# Setup Window
-		Gtk.Window.__init__(self, title="Qubes Manager", application=app)
-		self.set_default_size(800, 600)
-		self.set_resizable(True)
-		self.set_position(Gtk.WindowPosition.CENTER)
+		self.window = self.builder.get_object("managerWindow")
 
 		# Add Events
-		builder.connect_signals(self)
+		self.builder.connect_signals(self)
 
-		# Elements
-		self.vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-		self.vbox.pack_start(builder.get_object("menubarMain"), False, False, 0)
+		self.vbox = self.builder.get_object("vbox")
 
-		# Toolbar
-		self.vbox.pack_start(builder.get_object("toolbarMain"), False, False, 0)
-		self.vbox.pack_start(Gtk.Separator(), False, False, 0)
-
-		# Header of qube
-		headerApps = builder.get_object("headerApps")
-		headerNetworking = builder.get_object("headerNetworking")
-		headerTemplates = builder.get_object("headerTemplates")
-
-		self.qubes_header = {
-			"app": headerApps,
-			"net": headerNetworking,
-			"template": headerTemplates
-		}
-
-		self.vbox.pack_start(self.qubes_header["app"], False, False, 0)
-		self.vbox.pack_start(Gtk.Separator(), False, False, 0)
+		self.qubesTabs = self.builder.get_object("qubesTabs")
 
 		# ListStore of qubes
-		self.qubes_liststore = Gtk.ListStore(str, str, str, Pixbuf, str,
-											 bool, bool, bool)
+		self.qubes_liststore = self.builder.get_object("qubes_liststore")
+
 		for qube in qvm_collection.values():
 			if qube["icon"] != "default":
 				image = qube["icon"]
@@ -111,17 +86,13 @@ class ManagerWindow(Gtk.ApplicationWindow):
 		self.filter_states = ["All", "Running", "Halted", "Networked"]
 
 		# Create filter
-		self.type_filter = self.qubes_liststore.filter_new()
+		self.type_filter = self.builder.get_object("type_filter")
 		self.type_filter.set_visible_func(self.type_filter_func)
 
 		# Main Grid of qubes
 		self.create_qube_grid()
 
-		# Bottom Footer
-		self.vbox.pack_start(Gtk.Separator(), False, False, 0)
-
-		footerBox = Gtk.Box(spacing=10)
-		footerBox.set_border_width(10)	
+		footerBox = self.builder.get_object("footerBox")
 
 		# Add System qubes
 		for qube in qvm_collection.values():
@@ -140,58 +111,31 @@ class ManagerWindow(Gtk.ApplicationWindow):
 				device_button = self.create_device_button(qube)
 				footerBox.pack_start(device_button, False, False, 0)
 
-		footerBox.pack_end(builder.get_object("systemButtons"), False, False, 0)
+		footerBox.pack_end(self.builder.get_object("systemButtons"), False, False, 0)
 		self.vbox.pack_end(footerBox, False, False, 0)
 
 		# Check for Updates
 		# TODO: this should call out to check status somewhere
-		imageDom0Update = builder.get_object("imageDom0Update")
+		imageDom0Update = self.builder.get_object("imageDom0Update")
 		imageDom0Update.set_from_icon_name("software-update-available", 32)
-		buttonDom0Updates = builder.get_object("buttonDom0Updates")
+		buttonDom0Updates = self.builder.get_object("buttonDom0Updates")
 		buttonDom0Updates.set_label("Update Now")
 
 		# Show All
-		self.add(self.vbox)
-		self.show_all()
+		self.window.show_all()
 
 	def create_qube_grid(self):
 		"""Renders filterable IconView in a grid of qubes"""
 
-		# Create Scrollable
-		scrolled = Gtk.ScrolledWindow()
-		scrolled.set_vexpand(True)
-
-		# Receive signals from mouse clicks in IconView
-		Gtk.IconView.add_events(self, Gdk.EventMask.BUTTON_PRESS_MASK)
-
-		# IconView of qubes
-		iconview = Gtk.IconView.new()
-		iconview.set_model(self.type_filter)
-		iconview.set_columns(5)
-		iconview.set_item_width(120)
-		iconview.set_margin(10)
-		iconview.set_item_padding(15)
+		iconview = self.builder.get_object("iconview")
 
 		# Choose Icon & Text value in list
 		iconview.set_pixbuf_column(3)
 		iconview.set_text_column(1)
 
-		# Attach iconview
-		scrolled.add(iconview)
-	
-		# Make IconView items double clickable
-		iconview.connect('item-activated',
-			self.on_qube_item_double_click,
-			self.type_filter)
-
-		# Single Click
-		iconview.connect('button-press-event',
-			self.on_qube_item_single_click)
-
 		# Focus and show "app" qubes
 		iconview.grab_focus()
 		self.type_filter.refilter()
-		self.vbox.pack_start(scrolled, True, True, 0)
 
 	def create_sys_qube_button(self, qube):
 		"""Creates button for system qube"""
@@ -266,7 +210,7 @@ class ManagerWindow(Gtk.ApplicationWindow):
 		props= {}
 		for key in Gtk.ContainerClass.list_child_properties(type(parent)):
 			props[key.name]= parent.child_get_property(self.qubes_header[old],
-													   key.name)
+							            key.name)
 		parent.remove(self.qubes_header[old])
 		parent.add(self.qubes_header[new])
 		self.qubes_header[new].show_all()
@@ -303,8 +247,11 @@ class ManagerWindow(Gtk.ApplicationWindow):
 			else:
 				return False
 
-	def on_clicked_qubes_logo(self, button):
+	def gtk_main_quit(self, *args):
+		return Gtk.main_quit(*args)
 
+
+	def on_clicked_launch_about(self, button):
 		# AboutDialog
 		about = Gtk.AboutDialog()
 		about.set_position(Gtk.WindowPosition.CENTER)
@@ -358,14 +305,21 @@ class ManagerWindow(Gtk.ApplicationWindow):
 			if Gtk.Buildable.get_name(widget) == 'radioTemplates':
 				new_type = "template"
 
-		self.replace_qube_header(self.current_filter_type, new_type)
-		self.current_filter_type = new_type
+		type_to_page = {
+			'app': 0,
+			'net': 1,
+			'template': 2,
+		}
+		self.qubesTabs.set_current_page(type_to_page[new_type])
+
+	def on_tab_change(self, noteboot, page, page_num):
+		self.current_filter_type = ['app', 'net', 'template'][page_num]
 		self.current_filter = self.current_filter_type
 		self.type_filter.refilter()
 
-	def on_qube_item_double_click(self, icon_view, tree_path, store_item):
-		print "Item double-clicked name: %r" % store_item[tree_path][2]
-		qube_overview.main(store_item[tree_path][2])
+	def on_qube_item_double_click(self, icon_view, tree_path):
+		print "Item double-clicked name: %r" % self.qubes_liststore[tree_path][2]
+		qube_overview.main(self.qubes_liststore[tree_path][2])
 
 	def on_qube_item_single_click(self, iconview, event):
 		if event.button == 3:
@@ -378,31 +332,40 @@ class ManagerWindow(Gtk.ApplicationWindow):
 		print "launch Recipes"
 		qubes_recipes.main()
 
+        def on_clicked_launch_recipes_file(self, button):
+                print "launch Recipes Find"
+
 	def on_clicked_launch_backups(self, button):
 		print "launch Backups"
 		qubes_backups.main()
 
+        def on_clicked_launch_bakcups_restore(self, button):
+                print "launch Backups Restore"
+
 	def on_clicked_launch_help(self, button):
 		print "launch Help"
 
+        def on_clicked_launch_help_faq(self, button):
+                print "launch Help Faq"
+
 	def on_clicked_launch_settings(self, button):
 		print "Launch SettingsDialog"
-		dialogSettings = builder.get_object("dialogGlobalSettings")
+		dialogSettings = self.builder.get_object("dialogGlobalSettings")
 		dialogSettings.set_default_size(500, 350)
 		dialogSettings.set_title("Qubes Settings")
 		dialogSettings.set_border_width(15)
 
 		# Various comboboxes
-		comboSettingsFiles = builder.get_object("comboSettingsFiles")
-		comboSettingsBrowser = builder.get_object("comboSettingsBrowser")
-		comboSettingsText = builder.get_object("comboSettingsText")
-		comboSettingsTerminal = builder.get_object("comboSettingsTerminal")
+		comboSettingsFiles = self.builder.get_object("comboSettingsFiles")
+		comboSettingsBrowser = self.builder.get_object("comboSettingsBrowser")
+		comboSettingsText = self.builder.get_object("comboSettingsText")
+		comboSettingsTerminal = self.builder.get_object("comboSettingsTerminal")
 
-		comboSettingsUpdates = builder.get_object("comboSettingsUpdates")
-		comboSettingsClock = builder.get_object("comboSettingsClock")
-		comboSettingsNetworking = builder.get_object("comboSettingsNetworking")
-		comboSettingsTemplate = builder.get_object("comboSettingsTemplate") 
-		comboSettingsKernel = builder.get_object("comboSettingsKernel")
+		comboSettingsUpdates = self.builder.get_object("comboSettingsUpdates")
+		comboSettingsClock = self.builder.get_object("comboSettingsClock")
+		comboSettingsNetworking = self.builder.get_object("comboSettingsNetworking")
+		comboSettingsTemplate = self.builder.get_object("comboSettingsTemplate") 
+		comboSettingsKernel = self.builder.get_object("comboSettingsKernel")
 		
 		# Populate & Pick "qube" comboboxes
 		for this_qube in qvm_collection.values():
@@ -431,8 +394,8 @@ class ManagerWindow(Gtk.ApplicationWindow):
 		comboSettingsKernel.set_active(0)
 
 		# Memory Settings
-		spinSettingsMemMin = builder.get_object("spinSettingsMemMin")
-		spinSettingsMemBoost = builder.get_object("spinSettingsMemBoost")
+		spinSettingsMemMin = self.builder.get_object("spinSettingsMemMin")
+		spinSettingsMemBoost = self.builder.get_object("spinSettingsMemBoost")
 
 		mem_min_adjustment = Gtk.Adjustment(0, 0, 100, 1, 10, 0)
 		mem_boost_adjustment = Gtk.Adjustment(0, 0, 100, 1, 10, 0)
@@ -450,12 +413,27 @@ class ManagerWindow(Gtk.ApplicationWindow):
 	def on_clicked_attach_mic(self, button):
 		print "install attach mic"
 
-	def on_clicked_create_qube(self, button):
-		print "install create qube"
+        def on_clicked_qube_create(self, button):
+                print "create new qube"                                         
+                                                                     
+        def on_clicked_qube_clone(self, button):
+                print "clone qube"                                              
+                                                                             
+        def on_clicked_qube_delete(self, button):
+                print "qube delete"                                             
+                                                                             
+        def on_clicked_qube_start(self, button):
+                print "qube start"                                              
+                                                                             
+        def on_clicked_qube_shutdown(self, button):
+                print "qube shutdown"                                           
+                                                                             
+        def on_clicked_qube_kill(self, button):
+                print "qube kill"              
 
 	# Header Networking
 	def on_clicked_captive_portal(self, button):
-		print "launch captive portal"
+	        print "launch captive portal"
 
 	def on_clicked_stop_all_networking(self, button):
 		print "stop all networking"
@@ -494,12 +472,12 @@ class QubesManager(Gtk.Application):
 
 	def __init__(self):
 		Gtk.Application.__init__(self,
-								 application_id="org.invisiblethingslab.qubes",
-								 flags=Gio.ApplicationFlags.FLAGS_NONE)
+				application_id="org.invisiblethingslab.qubes",
+				flags=Gio.ApplicationFlags.FLAGS_NONE)
 
 	def do_activate(self):
 		win = ManagerWindow(self)
-		win.show_all()
+		win.window.show_all()
 
 	def do_startup(self):
 		Gtk.Application.do_startup(self)
@@ -560,6 +538,7 @@ class QubesManager(Gtk.Application):
 		print("clicked: Eject Device")
 
 
-app = QubesManager()
-exit_status = app.run(sys.argv)
-sys.exit(exit_status)
+def run():
+    app = QubesManager()
+    app.run(sys.argv)
+    Gtk.main()
