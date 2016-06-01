@@ -14,9 +14,8 @@ from datetime import datetime, timedelta
 
 # Gtk
 import gi
-from gi.repository import Gtk
-from gi.repository import Gdk
-from gi.repository import Gio
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk, Gdk, Gio
 from gi.repository.GdkPixbuf import Pixbuf
 
 # Qubes Test Data
