@@ -211,7 +211,9 @@
   <object class="GtkImage" id="imageLogo">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">computer</property>
+    <property name="margin_left">5</property>
+    <property name="margin_right">5</property>
+    <property name="pixbuf">../icons/qubes-logo-name.png</property>
   </object>
   <object class="GtkImage" id="imageMicrophone">
     <property name="visible">True</property>
@@ -1153,9 +1155,10 @@
                   <object class="GtkToolButton" id="toolbuttonLogo">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_left">10</property>
                     <property name="use_underline">True</property>
                     <property name="label_widget">imageLogo</property>
-                    <signal name="clicked" handler="on_clicked_qubes_logo" swapped="no"/>
+                    <signal name="clicked" handler="on_clicked_launch_about" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1166,6 +1169,8 @@
                   <object class="GtkSeparatorToolItem" id="toolbarSeparator1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_left">10</property>
+                    <property name="margin_right">10</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1228,6 +1233,8 @@
                   <object class="GtkSeparatorToolItem" id="toolbarSeparator2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_left">10</property>
+                    <property name="margin_right">10</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
