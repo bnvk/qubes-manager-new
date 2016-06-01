@@ -14,6 +14,7 @@ from datetime import datetime, timedelta
 
 # Gtk
 import gi
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, Gio
 from gi.repository.GdkPixbuf import Pixbuf
 
@@ -45,7 +46,6 @@ class RecipesWindow(Gtk.Window):
 		window.set_position(Gtk.WindowPosition.CENTER)
 		window.set_default_size(500, 450)
 		window.set_resizable(True)
-		
 
 		# Close Window & Show
 		window.connect("delete-event", Gtk.main_quit)

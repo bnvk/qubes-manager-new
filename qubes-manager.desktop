@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Exec=qubes-manager
+Path=/var/lib/qubes
+Icon=qubes-manager
+Terminal=false
+Name=Qubes Manager
+GenericName=Qubes Manager
+Comment=Control and configure your application, networking, and template qubes
+StartupNotify=false
+Categories=System;GTK;GNOME;

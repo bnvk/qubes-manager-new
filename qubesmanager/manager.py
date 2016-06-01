@@ -36,7 +36,7 @@ class ManagerWindow(object):
 
 	def __init__(self, app):
 
-		# Load Glade UI
+	      	# Load Glade UI
 		self.builder = Gtk.Builder()
 		self.builder.add_from_file("glade/manager.glade")
 
@@ -210,7 +210,7 @@ class ManagerWindow(object):
 		props= {}
 		for key in Gtk.ContainerClass.list_child_properties(type(parent)):
 			props[key.name]= parent.child_get_property(self.qubes_header[old],
-													   key.name)
+							            key.name)
 		parent.remove(self.qubes_header[old])
 		parent.add(self.qubes_header[new])
 		self.qubes_header[new].show_all()
@@ -250,8 +250,8 @@ class ManagerWindow(object):
 	def gtk_main_quit(self, *args):
 		return Gtk.main_quit(*args)
 
-	def on_clicked_qubes_logo(self, button):
 
+	def on_clicked_launch_about(self, button):
 		# AboutDialog
 		about = Gtk.AboutDialog()
 		about.set_position(Gtk.WindowPosition.CENTER)
@@ -332,12 +332,21 @@ class ManagerWindow(object):
 		print "launch Recipes"
 		qubes_recipes.main()
 
+        def on_clicked_launch_recipes_file(self, button):
+                print "launch Recipes Find"
+
 	def on_clicked_launch_backups(self, button):
 		print "launch Backups"
 		qubes_backups.main()
 
+        def on_clicked_launch_bakcups_restore(self, button):
+                print "launch Backups Restore"
+
 	def on_clicked_launch_help(self, button):
 		print "launch Help"
+
+        def on_clicked_launch_help_faq(self, button):
+                print "launch Help Faq"
 
 	def on_clicked_launch_settings(self, button):
 		print "Launch SettingsDialog"
@@ -404,12 +413,27 @@ class ManagerWindow(object):
 	def on_clicked_attach_mic(self, button):
 		print "install attach mic"
 
-	def on_clicked_create_qube(self, button):
-		print "install create qube"
+        def on_clicked_qube_create(self, button):
+                print "create new qube"                                         
+                                                                     
+        def on_clicked_qube_clone(self, button):
+                print "clone qube"                                              
+                                                                             
+        def on_clicked_qube_delete(self, button):
+                print "qube delete"                                             
+                                                                             
+        def on_clicked_qube_start(self, button):
+                print "qube start"                                              
+                                                                             
+        def on_clicked_qube_shutdown(self, button):
+                print "qube shutdown"                                           
+                                                                             
+        def on_clicked_qube_kill(self, button):
+                print "qube kill"              
 
 	# Header Networking
 	def on_clicked_captive_portal(self, button):
-		print "launch captive portal"
+	        print "launch captive portal"
 
 	def on_clicked_stop_all_networking(self, button):
 		print "stop all networking"
@@ -448,8 +472,8 @@ class QubesManager(Gtk.Application):
 
 	def __init__(self):
 		Gtk.Application.__init__(self,
-								 application_id="org.invisiblethingslab.qubes",
-								 flags=Gio.ApplicationFlags.FLAGS_NONE)
+				application_id="org.invisiblethingslab.qubes",
+				flags=Gio.ApplicationFlags.FLAGS_NONE)
 
 	def do_activate(self):
 		win = ManagerWindow(self)
